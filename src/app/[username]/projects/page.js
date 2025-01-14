@@ -14,8 +14,8 @@ export default function ProjectsPage() {
   const githubToken = process.env.NEXT_PUBLIC_GITHUB_TOKEN;
 
 
-
   return (
+    
     <div>
       <Sidebar highlight="Projects" username={username} />
       <NavBar username={username} githubToken={githubToken}/> 

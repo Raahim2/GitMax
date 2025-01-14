@@ -13,7 +13,7 @@ import RepoList from "@/components/dashboard/repolist";
 import InfoGrid from "@/components/dashboard/infogrid";
 import "@/styles/dashboard.css";
 
-export default function ProfilePage() {
+export default function Dashboard() {
     const { username } = useParams(); 
     const githubToken = process.env.NEXT_PUBLIC_GITHUB_TOKEN;
 
