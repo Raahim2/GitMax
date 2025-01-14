@@ -18,7 +18,6 @@ const InfoGrid = ({ username  , githubToken}) => {
           Authorization: `Bearer ${githubToken}`,
         };
 
-        // Fetch user profile
         const profileResponse = await fetch(`https://api.github.com/users/${username}`, { headers });
         const profileData = await profileResponse.json();
         setProfileData(profileData);
