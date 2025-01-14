@@ -23,6 +23,7 @@ import {
   FaNodeJs,
   FaDatabase
 } from "react-icons/fa";
+import CodeBlock from "./code";
 
 const FolderStructure = ({ username, repoName, githubToken, folderstructure }) => {
   const [items, setItems] = useState([]);
@@ -31,6 +32,8 @@ const FolderStructure = ({ username, repoName, githubToken, folderstructure }) =
   const [currentPath, setCurrentPath] = useState(folderstructure);
   const [repoSize, setRepoSize] = useState(0); // Store repo size
   const [folderCount, setFolderCount] = useState(0); // Store number of folders
+  const [selectedFileContent, setSelectedFileContent] = useState(null);
+
 
   // Fetch repository structure and file details
   useEffect(() => {
@@ -192,6 +195,8 @@ const FolderStructure = ({ username, repoName, githubToken, folderstructure }) =
     return "0 KB";
   };
 
+  
+
   // Function to format date (12 Feb 2024)
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -225,6 +230,19 @@ const FolderStructure = ({ username, repoName, githubToken, folderstructure }) =
   };
 
   return (
+    <>
+    {selectedFileContent ? (
+      <div className="file-content">
+        <button
+          onClick={() => setSelectedFileContent(null)}
+          style={{ marginBottom: "10px", padding: "5px 10px", backgroundColor: "lightgray", border: "none", cursor: "pointer" }}
+        >
+          Back to Folder View
+        </button>
+        <CodeBlock code={selectedFileContent} filename={"main.py"} />
+        
+      </div>
+    ) : (
     <div className="table-module">
       <div className="table-header">
         <h4 className="no-space-bottom">
@@ -271,29 +289,58 @@ const FolderStructure = ({ username, repoName, githubToken, folderstructure }) =
 
           {/* Display Files */}
           {fileItems.length > 0 && (
-            <div>
-              {fileItems.map((file, index) => (
-                <a key={index} href="#" className="table-row-link w-inline-block">
-                  <div className="w-layout-grid table-row">
-                    <div className="file-title">
-                      <div className="file-square">
-                        {getFileIcon(file.path)}
-                        <div className="light-fill"></div>
-                      </div>
-                      <div className="table-title">{file.path.split("/").pop()}</div> {/* Display only the file name */}
-                    </div>
-                    <div>{fileDetails[file.path]?.size || "0 KB"}</div>
-                    <div>{fileDetails[file.path]?.lastModified || "N/A"}</div>
-                    <div className="table-avatar-row" style={{ color: "blue" }}>
-                      View
-                    </div>
-                  </div>
-                </a>
-              ))}
+  <div>
+    {fileItems.map((file, index) => (
+      <div
+        key={index}
+        className="table-row-link w-inline-block"
+        style={{ cursor: "pointer" }}
+        onClick={async () => {
+          try {
+            const response = await fetch(
+              `https://api.github.com/repos/${username}/${repoName}/contents/${file.path}`,
+              {
+                headers: {
+                  Authorization: `token ${githubToken}`,
+                },
+              }
+            );
+            const data = await response.json();
+            if (data.content) {
+              const decodedContent = atob(data.content.replace(/\n/g, ""));
+              setSelectedFileContent(decodedContent);
+            } else {
+              setSelectedFileContent("Unable to fetch file content.");
+            }
+          } catch (error) {
+            console.error("Error fetching file content:", error);
+            setSelectedFileContent("An error occurred while fetching the file content.");
+          }
+        }}
+      >
+        <div className="w-layout-grid table-row">
+          <div className="file-title">
+            <div className="file-square">
+              {getFileIcon(file.path)}
+              <div className="light-fill"></div>
             </div>
-          )}
+            <div className="table-title">{file.path.split("/").pop()}</div>
+          </div>
+          <div>{fileDetails[file.path]?.size || "0 KB"}</div>
+          <div>{fileDetails[file.path]?.lastModified || "N/A"}</div>
+          <div className="table-avatar-row" style={{ color: "blue" }}>
+            View
+          </div>
         </div>
       </div>
+    ))}
+  </div>
+)}
+
+          
+        </div>
+      </div>
+
       {currentPath.length > 0 && (
         <button onClick={goUpFolder} style={{ marginBottom: "10px", padding: "5px 10px", backgroundColor: "lightgray", border: "none", cursor: "pointer" }}>
           Go Back
@@ -303,6 +350,8 @@ const FolderStructure = ({ username, repoName, githubToken, folderstructure }) =
         <div>All files under non-disclosure agreement</div>
       </div>
     </div>
+  )}
+  </>
   );
 };
 

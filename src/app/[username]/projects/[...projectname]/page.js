@@ -11,6 +11,7 @@ import RepoVisualization from "@/components/dashboard/repovisualization";
 import FolderStructure from "@/components/dashboard/folderstructure";
 import "@/styles/dashboard.css";
 
+
 export default function ProjectStructure() {
   const { username, projectname } = useParams();
   const githubToken = process.env.NEXT_PUBLIC_GITHUB_TOKEN;
@@ -21,6 +22,7 @@ export default function ProjectStructure() {
   // Extract project name (first part) and folder paths (remaining parts)
   const projectName = projectPathArray[0] || ""; // First element as project name
   const folderPaths = projectPathArray.slice(1); // Remaining elements as folder paths
+
 
   return (
     <div>
