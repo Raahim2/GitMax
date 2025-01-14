@@ -3,13 +3,13 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./page.module.css";
+import "@/styles/landing.css"
+import NavBar from "@/components/landing/navbar";
+import HeroSection from "@/components/landing/hero";
 
 export default function Home() {
   const [username, setUsername] = useState("");
   const router = useRouter();
-
-
-
 
 
   const handleSearch = (e) => {
@@ -20,6 +20,10 @@ export default function Home() {
   };
 
   return (
+    <>
+    <NavBar/>
+    <HeroSection/>
+    
     <div className={styles.container}>
       <h1 className={styles.title}>Enter a Username</h1>
       <form onSubmit={handleSearch} className={styles.form}>
@@ -35,5 +39,7 @@ export default function Home() {
         </button>
       </form>
     </div>
+    </>
+    
   );
 }

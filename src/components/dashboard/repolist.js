@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa"; // Importing arrow icons
 
 // Mapping of colors for different programming languages
@@ -19,19 +19,52 @@ const colorMap = {
   CSS: "css",
   "Jupyter Notebook": "jupyter-notebook",
   EJS: "ejs",
-  TypeScript:"typescript"
+  TypeScript: "typescript"
 };
 
 const getLanguageColor = (language) => {
   return colorMap[language] || "default-lang"; // Default class for unknown languages
 };
-const RepoList = ({ repodata }) => {
+
+const RepoList = ({ username, projectsPerPage, githubToken }) => {
+  const [repoData, setRepoData] = useState([]);
   const [currentSlide, setCurrentSlide] = useState(0);
-  const projectsPerPage = 5;
-  const totalPages = Math.ceil(repodata.length / projectsPerPage);
+  const [isLoading, setIsLoading] = useState(true); // To handle loading state
+
+  // Fetch repository data when the username changes or component mounts
+  useEffect(() => {
+    const fetchRepoData = async () => {
+      setIsLoading(true); // Set loading state to true while fetching
+
+      try {
+        const response = await fetch(`https://api.github.com/users/${username}/repos`, {
+          headers: {
+            Authorization: `token ${githubToken}`, // Use the token for authentication
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setRepoData(data); // Set the fetched repository data
+        } else {
+          throw new Error("Error fetching repository data");
+        }
+      } catch (error) {
+        console.error("Error fetching repository data:", error);
+      } finally {
+        setIsLoading(false); // Set loading state to false after fetching
+      }
+    };
+
+    if (username && githubToken) {
+      fetchRepoData(); // Fetch data when username and token are available
+    }
+  }, [username, githubToken]);
+
+  const totalPages = Math.ceil(repoData.length / projectsPerPage);
 
   // Get the repositories to display for the current slide
-  const currentProjects = repodata.slice(
+  const currentProjects = repoData.slice(
     currentSlide * projectsPerPage,
     (currentSlide + 1) * projectsPerPage
   );
@@ -62,29 +95,34 @@ const RepoList = ({ repodata }) => {
             <div className="caption-large">View Project</div>
           </div>
 
-          {/* Render the repositories for the current slide */}
-          {currentProjects.map((repo, index) => (
-            <div className="w-layout-grid table-row" key={index}>
-              <div className="table-title">{repo.name}</div>
-              <div className="status">
-                <div className={`indication-color ${getLanguageColor(repo.language)}`}></div>
-                <div>{repo.language || "N/A"}</div>
+          {/* Loading indicator */}
+          {isLoading ? (
+            <div>Loading...</div>
+          ) : (
+            // Render the repositories for the current slide
+            currentProjects.map((repo, index) => (
+              <div className="w-layout-grid table-row" key={index}>
+                <div className="table-title">{repo.name}</div>
+                <div className="status">
+                  <div className={`indication-color ${getLanguageColor(repo.language)}`}></div>
+                  <div>{repo.language || "N/A"}</div>
+                </div>
+                <div className="table-avatar-row">
+                  <img
+                    src={repo.owner?.avatar_url || "default-avatar.png"}
+                    loading="lazy"
+                    alt="Collaborator"
+                    className="in-row-avatar first"
+                  />
+                </div>
+                <div>
+                  <a href={`/${username}/projects/${repo.name}`} style={{ color: "blue" }} rel="noopener noreferrer">
+                    View Project
+                  </a>
+                </div>
               </div>
-              <div className="table-avatar-row">
-                <img
-                  src={repo.owner?.avatar_url || "default-avatar.png"}
-                  loading="lazy"
-                  alt="Collaborator"
-                  className="in-row-avatar first"
-                />
-              </div>
-              <div>
-                <a href={repo.html_url} target="_blank" style={{ color: "blue" }} rel="noopener noreferrer">
-                  View Project
-                </a>
-              </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
       </div>
 

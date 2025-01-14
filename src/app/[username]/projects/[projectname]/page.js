@@ -6,13 +6,14 @@ import React from "react";
 import Sidebar from "@/components/dashboard/sidebar";
 import NavBar from "@/components/dashboard/navbar";
 import MobileBar from "@/components/dashboard/mobilebar";
-import RepoList from "@/components/dashboard/repolist";
 import "@/styles/dashboard.css";
+import RepoInfoGrid from "@/components/dashboard/repoinfogrid";
+import RepoVisualization from "@/components/dashboard/repovisualization";
+import FolderStructure from "@/components/dashboard/folderstructure";
 
 export default function ProjectsPage() {
-  const { username } = useParams(); 
+  const { username  , projectname} = useParams(); 
   const githubToken = process.env.NEXT_PUBLIC_GITHUB_TOKEN;
-
 
 
   return (
@@ -22,7 +23,12 @@ export default function ProjectsPage() {
       <MobileBar />
       <div className="dashboard-content">
         <div className="dashboard-container">
-            <RepoList username={username} projectsPerPage={20} githubToken={githubToken}/>
+            <p>{projectname}</p>
+            <RepoInfoGrid username={username} repoName={projectname} githubToken={githubToken}/>
+            <p>.</p>
+            <RepoVisualization username={username} repoName={projectname} githubToken={githubToken}/>
+            <p>.</p>
+            <FolderStructure username={username} repoName={projectname} githubToken={githubToken}/>
         </div>
       </div>
     </div>

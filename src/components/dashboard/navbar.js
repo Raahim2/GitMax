@@ -1,8 +1,37 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 
-export default function NavBar({username , logo}) {
+export default function NavBar({ username , githubToken}) {
+  const [logo, setLogo] = useState(null);
+
+  useEffect(() => {
+    const fetchUserLogo = async () => {
+      try {
+        const response = await fetch(`https://api.github.com/users/${username}`, {
+          headers: {
+            Authorization: `token ${githubToken}`,
+          },
+        });
+        const data = await response.json();
+        if (data.avatar_url) {
+          setLogo(data.avatar_url); // Set the logo URL
+        }
+      } catch (error) {
+        console.error("Error fetching GitHub user data:", error);
+      }
+    };
+
+    if (username) {
+      fetchUserLogo();
+    }
+  }, [username]);
+
+  if (!logo) {
+    return <div>Loading...</div>; // Show loading message until logo is fetched
+  }
+
   return (
     <>
       <div className="dashboard-banner">
@@ -33,11 +62,11 @@ export default function NavBar({username , logo}) {
             </div>
           </div>
           <div className="header-content">
-          <Link href={`https://github.com/${username}`} className="banner-avatar-wrapper w-inline-block">
+            <Link href={`https://github.com/${username}`} className="banner-avatar-wrapper w-inline-block"  target="_blank">
               <img
-                src={logo}
+                src={logo} // Dynamically fetched logo
                 loading="lazy"
-                alt=""
+                alt="User Avatar"
                 className="banner-avatar-image"
               />
               <div>
