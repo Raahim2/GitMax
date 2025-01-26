@@ -32,7 +32,9 @@ const FolderStructure = ({ username, repoName, githubToken, folderstructure }) =
   const [currentPath, setCurrentPath] = useState(folderstructure);
   const [repoSize, setRepoSize] = useState(0); // Store repo size
   const [folderCount, setFolderCount] = useState(0); // Store number of folders
-  const [selectedFileContent, setSelectedFileContent] = useState(null);
+  const [selectedFile, setSelectedFile] = useState({ content: null, filename: "" });
+
+  
 
 
   // Fetch repository structure and file details
@@ -229,20 +231,43 @@ const FolderStructure = ({ username, repoName, githubToken, folderstructure }) =
     return sizePerFolder >= 0.1 ? sizePerFolder.toFixed(2) + " KB" : (sizePerFolder).toFixed(2) + " KB";
   };
 
+  const fetchFileContent = async (filePath) => {
+    try {
+      const response = await fetch(
+        `https://api.github.com/repos/${username}/${repoName}/contents/${filePath}`,
+        {
+          headers: {
+            Authorization: `token ${githubToken}`,
+          },
+        }
+      );
+      const data = await response.json();
+      if (data.content) {
+        const decodedContent = atob(data.content.replace(/\n/g, ""));
+        setSelectedFile({ content: decodedContent, filename: filePath.split("/").pop() }); // Set both content and filename
+      } else {
+        setSelectedFile({ content: "Unable to fetch file content.", filename: "" });
+      }
+    } catch (error) {
+      console.error("Error fetching file content:", error);
+      setSelectedFile({ content: "An error occurred while fetching the file content.", filename: "" });
+    }
+  };
+  
+
   return (
     <>
-    {selectedFileContent ? (
-      <div className="file-content">
-        <button
-          onClick={() => setSelectedFileContent(null)}
-          style={{ marginBottom: "10px", padding: "5px 10px", backgroundColor: "lightgray", border: "none", cursor: "pointer" }}
-        >
-          Back to Folder View
-        </button>
-        <CodeBlock code={selectedFileContent} filename={"main.py"} />
-        
-      </div>
-    ) : (
+    {selectedFile.content ? (
+  <div className="file-content">
+    <button
+      onClick={() => setSelectedFile({ content: null, filename: "" })}
+      style={{ marginBottom: "10px", padding: "5px 10px", backgroundColor: "lightgray", border: "none", cursor: "pointer" }}
+    >
+      Back to Folder View
+    </button>
+    <CodeBlock code={selectedFile.content} filename={selectedFile.filename} /> {/* Use dynamic filename */}
+  </div>
+) : (
     <div className="table-module">
       <div className="table-header">
         <h4 className="no-space-bottom">
@@ -295,28 +320,7 @@ const FolderStructure = ({ username, repoName, githubToken, folderstructure }) =
         key={index}
         className="table-row-link w-inline-block"
         style={{ cursor: "pointer" }}
-        onClick={async () => {
-          try {
-            const response = await fetch(
-              `https://api.github.com/repos/${username}/${repoName}/contents/${file.path}`,
-              {
-                headers: {
-                  Authorization: `token ${githubToken}`,
-                },
-              }
-            );
-            const data = await response.json();
-            if (data.content) {
-              const decodedContent = atob(data.content.replace(/\n/g, ""));
-              setSelectedFileContent(decodedContent);
-            } else {
-              setSelectedFileContent("Unable to fetch file content.");
-            }
-          } catch (error) {
-            console.error("Error fetching file content:", error);
-            setSelectedFileContent("An error occurred while fetching the file content.");
-          }
-        }}
+        onClick={() => fetchFileContent(file.path)}
       >
         <div className="w-layout-grid table-row">
           <div className="file-title">
@@ -347,7 +351,7 @@ const FolderStructure = ({ username, repoName, githubToken, folderstructure }) =
         </button>
       )}
       <div className="table-bottom-caption">
-        <div>All files under non-disclosure agreement</div>
+        <div>All files data from github</div>
       </div>
     </div>
   )}

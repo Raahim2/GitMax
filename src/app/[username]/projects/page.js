@@ -12,14 +12,19 @@ import "@/styles/dashboard.css";
 export default function ProjectsPage() {
   const { username } = useParams(); 
   const githubToken = process.env.NEXT_PUBLIC_GITHUB_TOKEN;
+  const [isSidebarContentVisible, setIsSidebarContentVisible] = useState(true); // State to manage sidebar content class
+
+  const toggleSidebarContent = () => {
+      setIsSidebarContentVisible((prev) => !prev); // Toggle sidebar content class
+  };
 
 
   return (
     
     <div>
-      <Sidebar highlight="Projects" username={username} />
-      <NavBar username={username} githubToken={githubToken}/> 
-      <MobileBar />
+      <Sidebar highlight="Dashboard" username={username} className={isSidebarContentVisible ? "sidebar-content" : ""} />
+      <NavBar username={username} githubToken={githubToken} />
+      <MobileBar toggleSidebarContent={toggleSidebarContent}/>
       <div className="dashboard-content">
         <div className="dashboard-container">
             <RepoList username={username} projectsPerPage={20} githubToken={githubToken}/>

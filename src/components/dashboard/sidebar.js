@@ -1,20 +1,18 @@
 "use client";
 
 import Link from "next/link";
+import { FaHome, FaProjectDiagram, FaUser, FaCog } from "react-icons/fa"; // Import necessary Font Awesome icons
 
-export default function Sidebar({ highlight, username }) {
+export default function Sidebar({ highlight, username, className }) {
   const links = [
-    { name: "Dashboard", icon: "https://assets.website-files.com/6057ab51530cb39d3fdac75d/6058703e748ec21a46ed3b4e_Account.svg" },
-    { name: "Projects", icon: "https://assets.website-files.com/6057ab51530cb39d3fdac75d/6058703e233c35f06d95eeab_Projects.svg" },
-    { name: "Profile", icon: "https://assets.website-files.com/6057ab51530cb39d3fdac75d/6058703e3a273545cf97d31b_Profile.svg" },
-    // { name: "Team", icon: "https://assets.website-files.com/6057ab51530cb39d3fdac75d/6058703e101182eaf273ae92_Team.svg" },
-    // { name: "Orders", icon: "https://assets.website-files.com/6057ab51530cb39d3fdac75d/605882dc6380b2ff7a6e9171_shopping-cart.svg" },
-    // { name: "Account", icon: "https://assets.website-files.com/6057ab51530cb39d3fdac75d/605882df8063b970ea883ad9_toggle-left.svg" },
-    // { name: "Authentication", icon: "https://assets.website-files.com/6057ab51530cb39d3fdac75d/605882e02b9b3466f904de5b_unlock.svg" }
+    { name: "Dashboard", icon: <FaHome size={24} style={{marginRight:20}}/> }, // Home icon for Dashboard
+    { name: "Projects", icon: <FaProjectDiagram size={24} style={{marginRight:20}}/> }, // Project diagram icon for Projects
+    { name: "Profile", icon: <FaUser size={24} style={{marginRight:20}}/> }, // User icon for Profile
+    { name: "Automation", icon: <FaCog size={24} style={{marginRight:20}}/> }, // Cog icon for Automation
   ];
 
   return (
-    <div className="sidebar-content">
+    <div className={className}>
       <div className="sidebar-logo-wrapper">
         <Link href="#">
           <img
@@ -29,23 +27,17 @@ export default function Sidebar({ highlight, username }) {
       {links.map((link) => (
         <Link
           key={link.name}
-          href={link.name === "Dashboard" ? `/${username}` : `/${username}/${link.name.toLowerCase()}`}  // Special case for Dashboard
+          href={link.name === "Dashboard" ? `/${username}` : `/${username}/${link.name.toLowerCase()}`}
           className="nav-link w-inline-block"
           style={{
-            color: link.name === highlight ? "#763FF9" : "inherit", // Apply color to text if highlighted
-            backgroundColor: link.name === highlight ? "rgba(118, 63, 249, 0.2)" : "inherit", // Add subtle background highlight
+            color: link.name === highlight ? "#763FF9" : "inherit",
+            backgroundColor: link.name === highlight ? "rgba(118, 63, 249, 0.2)" : "inherit",
           }}
         >
-          <img
-            src={link.icon}
-            loading="lazy"
-            alt={link.name}
-            className="nav-icon"
-            style={{
-              filter: link.name === highlight ? "invert(100%) sepia(100%) saturate(3252%) hue-rotate(223deg) brightness(99%) contrast(104%)" : "none", // Apply color change to icon
-            }}
-          />
-          <div style={{ color: link.name === highlight ? "#763FF9" : "inherit" }}>{link.name}</div> {/* Apply color to text */}
+          <span style={{ display: 'flex', alignItems: 'center' }}>
+            {link.icon} {/* Render the Font Awesome icon directly */}
+          </span>
+          <div style={{ color: link.name === highlight ? "#763FF9" : "inherit" }}>{link.name}</div>
         </Link>
       ))}
     </div>

@@ -23,12 +23,18 @@ export default function ProjectStructure() {
   const projectName = projectPathArray[0] || ""; // First element as project name
   const folderPaths = projectPathArray.slice(1); // Remaining elements as folder paths
 
+  const [isSidebarContentVisible, setIsSidebarContentVisible] = useState(true); // State to manage sidebar content class
+
+  const toggleSidebarContent = () => {
+      setIsSidebarContentVisible((prev) => !prev); // Toggle sidebar content class
+  };
+
 
   return (
     <div>
-      <Sidebar highlight="Projects" username={username} />
+      <Sidebar highlight="Dashboard" username={username} className={isSidebarContentVisible ? "sidebar-content" : ""} />
       <NavBar username={username} githubToken={githubToken} />
-      <MobileBar />
+      <MobileBar toggleSidebarContent={toggleSidebarContent}/>
       <div className="dashboard-content">
         <div className="dashboard-container">
           <p>Project Name: {projectName}</p>

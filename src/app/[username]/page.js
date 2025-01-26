@@ -17,11 +17,17 @@ export default function Dashboard() {
     const { username } = useParams(); 
     const githubToken = process.env.NEXT_PUBLIC_GITHUB_TOKEN;
 
+    const [isSidebarContentVisible, setIsSidebarContentVisible] = useState(true); // State to manage sidebar content class
+
+    const toggleSidebarContent = () => {
+        setIsSidebarContentVisible((prev) => !prev); // Toggle sidebar content class
+    };
+
     return (
         <div>
-            <Sidebar highlight="Dashboard" username={username} />
+            <Sidebar highlight="Dashboard" username={username} className={isSidebarContentVisible ? "sidebar-content" : ""} />
             <NavBar username={username} githubToken={githubToken} />
-            <MobileBar />
+            <MobileBar toggleSidebarContent={toggleSidebarContent}/>
             <div className="dashboard-content">
                 <div className="dashboard-container">
                     <div className="w-layout-grid _2-1-grid">
