@@ -16,7 +16,7 @@ export default function Sidebar({ highlight, username, className }) {
       <div className="sidebar-logo-wrapper">
         <Link href="#">
           <img
-            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/60586883ea59be120545c340_Dash%20Logo.svg"
+            src="/logo.png"
             loading="lazy"
             alt="Logo"
             className="sidebar-logo"

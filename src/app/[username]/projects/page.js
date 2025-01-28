@@ -22,9 +22,9 @@ export default function ProjectsPage() {
   return (
     
     <div>
-      <Sidebar highlight="Dashboard" username={username} className={isSidebarContentVisible ? "sidebar-content" : ""} />
+      <Sidebar highlight="Projects" username={username} className={isSidebarContentVisible ? "sidebar-content" : ""} />
       <NavBar username={username} githubToken={githubToken} />
-      <MobileBar toggleSidebarContent={toggleSidebarContent}/>
+      <MobileBar username={username} toggleSidebarContent={toggleSidebarContent}/>
       <div className="dashboard-content">
         <div className="dashboard-container">
             <RepoList username={username} projectsPerPage={20} githubToken={githubToken}/>

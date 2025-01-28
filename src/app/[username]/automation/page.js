@@ -21,7 +21,7 @@ export default function AutomationPage() {
     <div>
       <Sidebar highlight="Automation" username={username} className={isSidebarContentVisible ? "sidebar-content" : ""} />
       <NavBar username={username} githubToken={githubToken} />
-      <MobileBar toggleSidebarContent={toggleSidebarContent}/>
+      <MobileBar username={username} toggleSidebarContent={toggleSidebarContent}/>
       <div className="dashboard-content">
         <div className="dashboard-container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '20px' }}>
           <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>Automation Options</h2>

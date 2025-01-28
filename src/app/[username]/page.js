@@ -27,7 +27,7 @@ export default function Dashboard() {
         <div>
             <Sidebar highlight="Dashboard" username={username} className={isSidebarContentVisible ? "sidebar-content" : ""} />
             <NavBar username={username} githubToken={githubToken} />
-            <MobileBar toggleSidebarContent={toggleSidebarContent}/>
+            <MobileBar username={username} toggleSidebarContent={toggleSidebarContent}/>
             <div className="dashboard-content">
                 <div className="dashboard-container">
                     <div className="w-layout-grid _2-1-grid">

@@ -47,7 +47,7 @@ export default function ProfilePage() {
     <div>
       <Sidebar highlight="Profile" username={username} className={isSidebarContentVisible ? "sidebar-content" : ""} />
       <NavBar username={username} githubToken={githubToken} />
-      <MobileBar toggleSidebarContent={toggleSidebarContent}/>
+      <MobileBar username={username} toggleSidebarContent={toggleSidebarContent}/>
       <div className="dashboard-content">
         <div className="dashboard-container">
           {loading && <p>Loading...</p>}

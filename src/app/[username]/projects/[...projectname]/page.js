@@ -32,9 +32,9 @@ export default function ProjectStructure() {
 
   return (
     <div>
-      <Sidebar highlight="Dashboard" username={username} className={isSidebarContentVisible ? "sidebar-content" : ""} />
+      <Sidebar highlight="Projects" username={username} className={isSidebarContentVisible ? "sidebar-content" : ""} />
       <NavBar username={username} githubToken={githubToken} />
-      <MobileBar toggleSidebarContent={toggleSidebarContent}/>
+      <MobileBar username={username} toggleSidebarContent={toggleSidebarContent}/>
       <div className="dashboard-content">
         <div className="dashboard-container">
           <p>Project Name: {projectName}</p>

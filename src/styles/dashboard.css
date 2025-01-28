@@ -981,12 +981,15 @@
    }
    
    .sidebar-logo-wrapper {
-     padding: 30px 24px 48px;
-   }
+    display: flex;
+    justify-content: center; /* Centers the logo horizontally */
+    padding: 30px 24px 48px;
+    width: 100%; /* Ensure it takes the full width */
+  }
    
    .sidebar-logo {
-     max-height: 24px;
-     max-width: 200px;
+    filter:invert(1);
+     width: 130px;
    }
    
    .nav-icon {
