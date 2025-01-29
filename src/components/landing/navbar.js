@@ -1,37 +1,41 @@
-import React from 'react';
-
+import { signIn, signOut, useSession } from "next-auth/react";
+import React, { useEffect } from 'react';
+import { useRouter } from "next/navigation";
 
 const Navbar = () => {
+  const { data: session } = useSession();
+  const router = useRouter();
+
+  const handleSignIn = async () => {
+    // Sign in with GitHub
+    await signIn("github"); // No callbackUrl here
+  };
+
+  useEffect(() => {
+    if (session && session.user) {
+      router.push(`/${session.user.username}`); // Redirect to username page
+    }
+  }, [session, router]);
+
   return (
     <div className="navbar-container">
       <div className="navbar-content">
         <a href="/" className="navbar-logo">
-          <img
-            src="./logo.png"
-            alt="Logo"
-            className="logo-image"
-          />
+          <img src="/logo.png" alt="Logo" className="logo-image" />
         </a>
-        {/* <nav className="navbar-menu">
-          <ul className="menu-list">
-            <li className="menu-item">
-              <a href="/" className="menu-link">Home</a>
-            </li>
-            <li className="menu-item">
-              <a href="#" className="menu-link">Features</a>
-            </li>
-            <li className="menu-item">
-              <a href="#" className="menu-link">Pricing</a>
-            </li>
-          </ul>
-        </nav> */}
+        
         <div className="navbar-actions">
-          <a href="#" className="btn btn-primary">Login</a>
-          <a href="#" className="btn btn-secondary">Login With Github</a>
-        </div>
-        <div className="hamburger-menu">
-          <span className="bar"></span>
-          <span className="bar"></span>
+          {session ? (
+            <>
+              <button onClick={() => signOut({ callbackUrl: '/' })} className="btn btn-secondary">
+                Logout
+              </button>
+            </>
+          ) : (
+            <button onClick={handleSignIn} className="btn btn-secondary">
+              Login With GitHub
+            </button>
+          )}
         </div>
       </div>
     </div>

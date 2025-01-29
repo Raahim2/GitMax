@@ -1,15 +1,24 @@
 "use client";
 
 import Link from "next/link";
-import { FaHome, FaProjectDiagram, FaUser, FaCog } from "react-icons/fa"; // Import necessary Font Awesome icons
+import { FaHome, FaProjectDiagram, FaUser, FaCog , FaSignOutAlt} from "react-icons/fa";
+import { signOut, useSession } from "next-auth/react"; // Import useSession
+import { useRouter } from 'next/navigation'; // Import useRouter for redirection
 
 export default function Sidebar({ highlight, username, className }) {
+  const { data: session } = useSession(); // Get session data
+  const router = useRouter(); // Initialize router for redirection
+
   const links = [
-    { name: "Dashboard", icon: <FaHome size={24} style={{marginRight:20}}/> }, // Home icon for Dashboard
-    { name: "Projects", icon: <FaProjectDiagram size={24} style={{marginRight:20}}/> }, // Project diagram icon for Projects
-    { name: "Profile", icon: <FaUser size={24} style={{marginRight:20}}/> }, // User icon for Profile
-    { name: "Automation", icon: <FaCog size={24} style={{marginRight:20}}/> }, // Cog icon for Automation
+    { name: "Dashboard", icon: <FaHome size={24} style={{marginRight:20}}/> },
+    { name: "Projects", icon: <FaProjectDiagram size={24} style={{marginRight:20}}/> },
+    { name: "Profile", icon: <FaUser size={24} style={{marginRight:20}}/> },
+    { name: "Automation", icon: <FaCog size={24} style={{marginRight:20}}/> },
   ];
+
+  const handleLogout = async () => {
+    await signOut({ callbackUrl: '/' }); // Sign out and redirect to home
+  };
 
   return (
     <div className={className}>
@@ -35,11 +44,19 @@ export default function Sidebar({ highlight, username, className }) {
           }}
         >
           <span style={{ display: 'flex', alignItems: 'center' }}>
-            {link.icon} {/* Render the Font Awesome icon directly */}
+            {link.icon}
           </span>
           <div style={{ color: link.name === highlight ? "#763FF9" : "inherit" }}>{link.name}</div>
         </Link>
       ))}
+
+      {/* Conditionally render Logout button */}
+      {session && (
+        <p onClick={handleLogout} className="nav-link w-inline-block" style={{ display: 'flex', alignItems: 'center', marginTop: '10px' }}>
+          <FaSignOutAlt size={24} style={{ marginRight: 20 }} /> {/* Use an icon similar to others */}
+          Logout
+        </p>
+      )}
     </div>
   );
 }

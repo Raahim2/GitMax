@@ -17,10 +17,9 @@ export default function Dashboard() {
     const { username } = useParams(); 
     const githubToken = process.env.NEXT_PUBLIC_GITHUB_TOKEN;
 
-    const [isSidebarContentVisible, setIsSidebarContentVisible] = useState(true); // State to manage sidebar content class
-
+    const [isSidebarContentVisible, setIsSidebarContentVisible] = useState(true); 
     const toggleSidebarContent = () => {
-        setIsSidebarContentVisible((prev) => !prev); // Toggle sidebar content class
+        setIsSidebarContentVisible((prev) => !prev); 
     };
 
     return (

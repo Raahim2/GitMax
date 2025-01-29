@@ -3,13 +3,15 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 80vh; /* 80% of the viewport height */
-  background-color: #ffffff; /* White background */
+  min-height: 60vh; /* 80% of the viewport height */
+  background-color: #f8f9fb; /* White background */
   color: #333; /* Dark text for contrast */
   padding: 40px 20px; /* Increased padding for better spacing */
-  max-width: 1200px; /* Limit width for larger screens */
   margin: 0 auto; /* Center the container horizontally */
+  max-width: 1200px;
+  margin-top: 100px;
 }
+
 
 .title {
   font-size: 2.5rem; /* Larger font size for the title */
@@ -55,7 +57,7 @@
   font-size: 1.1rem; /* Slightly larger font size */
   font-weight: bold;
   color: #fff; /* White text for the button */
-  background-color: #0070f3; /* Blue background for the button */
+  background-color: black; /* Blue background for the button */
   border: none;
   border-radius: 30px; /* Slightly larger border radius */
   cursor: pointer;
@@ -64,7 +66,7 @@
 }
 
 .button:hover {
-  background-color: #005bb5; /* Darker blue on hover */
+  background-color: black; /* Darker blue on hover */
   box-shadow: 0 4px 12px rgba(0, 91, 181, 0.2); /* Enhanced shadow on hover */
 }
 
@@ -72,109 +74,62 @@
 /* navbar.css */
 
 /* General Navbar Container */
+/* style.css */
+
+body {
+  margin: 0;
+  background-color: #f8f9fb;
+  font-family: 'Arial', sans-serif;
+}
+
+
 .navbar-container {
-  background-color: #ffffff;
-  padding: 20px 30px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  position: relative;
-  z-index: 1000;
+  color: black; 
+  background-color: white;;
+  padding: 10px 20px; /* Padding around the navbar */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
 }
 
 .navbar-content {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  justify-content: space-between; /* Space between logo and actions */
+  align-items: center; /* Center items vertically */
 }
 
-/* Logo */
 .navbar-logo .logo-image {
-  width:  110px;
-  filter: invert(1);
+  height: 40px; 
+  filter:invert(1); /* Invert the logo color */
 }
 
-/* Navigation Menu */
-.navbar-menu {
-  display: flex;
-  gap: 20px;
-}
-
-.menu-list {
-  list-style: none;
-  display: flex;
-  gap: 15px;
-  margin: 0;
-  padding: 0;
-}
-
-.menu-item .menu-link {
-  text-decoration: none;
-  font-size: 16px;
-  color: #333;
-  font-weight: 500;
-  transition: color 0.3s ease;
-}
-
-.menu-item .menu-link:hover {
-  color: #0070f3;
-}
-
-/* Action Buttons */
 .navbar-actions {
   display: flex;
-  gap: 10px;
+  gap: 15px; /* Space between buttons */
 }
 
 .btn {
-  text-decoration: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  font-size: 14px;
-  font-weight: 600;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  padding: 10px 15px; /* Padding for buttons */
+  border-radius: 5px; /* Rounded corners */
+  text-decoration: none; /* Remove underline from links */
+  font-weight: bold; /* Make button text bold */
 }
 
 .btn-primary {
-  background-color: #0070f3;
-  color: #fff;
-}
-
-.btn-primary:hover {
-  background-color: #0056c1;
+  background-color: #007bff; /* Bootstrap primary color */
+  color: white; /* Text color for primary button */
 }
 
 .btn-secondary {
-  background-color: #f5f5f5;
-  color: #333;
+  background-color: black; /* Bootstrap secondary color */
+  color: white; /* Text color for secondary button */
+}
+
+/* Hover effects for buttons */
+.btn-primary:hover {
+  background-color: #0056b3; /* Darker shade on hover */
 }
 
 .btn-secondary:hover {
-  background-color: #e0e0e0;
+  background-color: #5a6268; /* Darker shade on hover */
 }
 
-/* Hamburger Menu */
-.hamburger-menu {
-  display: none;
-  flex-direction: column;
-  gap: 5px;
-  cursor: pointer;
-}
-
-.hamburger-menu .bar {
-  height: 3px;
-  width: 25px;
-  background-color: #333;
-  border-radius: 3px;
-}
-
-/* Responsive Styles */
-@media (max-width: 768px) {
-  .navbar-menu {
-    display: none; /* Hide menu on small screens */
-  }
-
-  .hamburger-menu {
-    display: flex;
-  }
-}
-
- 
+/* Responsive Design */

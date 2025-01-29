@@ -19,7 +19,7 @@ export default function Home() {
   return (
     <>
       <NavBar />
-
+    
       <div className="container">
   <h1 className="title">Enter a GitHub Username</h1>
   <form onSubmit={handleSearch} className="form">
