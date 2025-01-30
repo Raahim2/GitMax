@@ -13,6 +13,10 @@
     align-items: center;
     z-index: 1000;
   }
+
+  .radio-input {
+    display: none;
+  }
   
   /* Modal container */
   .modal {
@@ -320,4 +324,91 @@
 
 .create-button:hover {
   background: #0070f3;
+}
+
+.loading-message,
+.error-message,
+.empty-message {
+  padding: 20px;
+  text-align: center;
+  color: #666;
+}
+
+
+.visibility-badge {
+  background-color: #e5e7eb;
+  color: #374151;
+  font-size: 0.75rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-left: 8px;
+  border: 1px solid #d1d5db;
+}
+
+.error-message {
+  color: #ff4444;
+  padding: 10px;
+  margin-bottom: 15px;
+  background: #fff5f5;
+  border-radius: 4px;
+  border: 1px solid #ffd6d6;
+}
+
+.create-button:disabled {
+  background-color: #94a3b8;
+  cursor: not-allowed;
+}
+
+input:disabled, textarea:disabled {
+  background-color: #f1f5f9;
+  cursor: not-allowed;
+}
+
+/* Notification styles */
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 15px 25px;
+  border-radius: 8px;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+.notification.success {
+  background: #38a169;
+  border: 1px solid #2f855a;
+}
+
+.notification.error {
+  background: #e53e3e;
+  border: 1px solid #c53030;
+}
+
+.notification-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.notification-icon {
+  font-size: 1.2rem;
+}
+
+.notification-close {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  margin-left: 15px;
+  padding: 0;
+  opacity: 0.8;
+}
+
+.notification-close:hover {
+  opacity: 1;
 }

@@ -1,23 +1,51 @@
 "use client";
 
-import React, { useState } from "react";
-import { FaTimes , FaSearch } from "react-icons/fa";
-import "@/styles/automation.css"
+import React, { useState, useEffect } from "react";
+import { FaTimes, FaSearch } from "react-icons/fa";
+import { useSession } from "next-auth/react";
+import "@/styles/automation.css";
 
 const ImportRepo = ({ isOpen, onClose }) => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [repos, setRepos] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const { data: session } = useSession();
 
-  // Dummy repositories data
-  const dummyRepos = [
-    { id: 1, name: "my-awesome-project", owner: "user1", description: "A project to automate workflows." },
-    { id: 2, name: "react-dashboard", owner: "user2", description: "A modern React dashboard template." },
-    { id: 3, name: "nextjs-blog", owner: "user3", description: "A blog built with Next.js and Tailwind CSS." },
-    { id: 4, name: "nextjs-blog", owner: "user3", description: "A blog built with Next.js and Tailwind CSS." },
-    { id: 5, name: "nextjs-blog", owner: "user3", description: "A blog built with Next.js and Tailwind CSS." },
-  ];
+  useEffect(() => {
+    const fetchRepos = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch("https://api.github.com/user/repos", {
+          headers: {
+            Authorization: `Bearer ${session?.accessToken}`,
+            Accept: "application/vnd.github.v3+json"
+          }
+        });
 
-  // Filter repositories based on search query
-  const filteredRepos = dummyRepos.filter((repo) =>
+        if (!response.ok) throw new Error("Failed to fetch repositories");
+        
+        const data = await response.json();
+        setRepos(data.map(repo => ({
+          id: repo.id,
+          name: repo.name,
+          owner: repo.owner?.login || "Unknown",
+          description: repo.description || "No description",
+          private: repo.private
+        })));
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (isOpen && session?.accessToken) {
+      fetchRepos();
+    }
+  }, [isOpen, session?.accessToken]);
+
+  const filteredRepos = repos.filter((repo) =>
     repo.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
@@ -42,16 +70,29 @@ const ImportRepo = ({ isOpen, onClose }) => {
           />
         </div>
         <div className="repo-list">
-          {filteredRepos.map((repo) => (
-            <div key={repo.id} className="repo-item">
-              <div className="repo-info">
-                <h3>{repo.name}</h3>
-                <p>{repo.description}</p>
-                <span className="repo-owner">{repo.owner}</span>
+          {loading ? (
+            <div className="loading-message">Loading repositories...</div>
+          ) : error ? (
+            <div className="error-message">Error: {error}</div>
+          ) : filteredRepos.length === 0 ? (
+            <div className="empty-message">No repositories found</div>
+          ) : (
+            filteredRepos.map((repo) => (
+              <div key={repo.id} className="repo-item">
+                <div className="repo-info">
+                  <h3>
+                    {repo.name}
+                    {repo.private && (
+                      <span className="visibility-badge">Private</span>
+                    )}
+                  </h3>
+                  <p>{repo.description}</p>
+                  <span className="repo-owner">{repo.owner}</span>
+                </div>
+                <button className="import-button">Import</button>
               </div>
-              <button className="import-button">Import</button>
-            </div>
-          ))}
+            ))
+          )}
         </div>
       </div>
     </div>

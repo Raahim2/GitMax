@@ -8,26 +8,36 @@ const authOptions = {
     GitHubProvider({
       clientId: process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID,
       clientSecret: process.env.NEXT_PUBLIC_GITHUB_CLIENT_SECRET,
+      // Add authorization parameters to request repo access
+      authorization: {
+        params: {
+          scope: "repo", // Request access to private repositories
+        },
+      },
     }),
   ],
   pages: {
-    signIn: '/auth/signin', // Optional: customize the sign-in page
+    signIn: '/auth/signin',
   },
   callbacks: {
     async jwt({ token, user, account, profile }) {
-      // Store user information in the token
+      // Store access token and user info
+      if (account) {
+        token.accessToken = account.access_token;
+      }
       if (profile) {
-        token.username = profile.login; // GitHub username
-        token.name = profile.name;       // Full name
-        token.avatar = profile.avatar_url; // Profile picture URL
+        token.username = profile.login;
+        token.name = profile.name;
+        token.avatar = profile.avatar_url;
       }
       return token;
     },
     async session({ session, token }) {
-      // Attach token properties to session
+      // Expose access token to client side
+      session.accessToken = token.accessToken;
       session.user.username = token.username;
       session.user.name = token.name;
-      session.user.avatar = token.avatar; // Add avatar URL to session
+      session.user.avatar = token.avatar;
       return session;
     },
   },
