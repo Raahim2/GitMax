@@ -66,6 +66,7 @@ const CreateRepoModal = ({ isOpen, onClose }) => {
         throw new Error(errorData.message || "Failed to create repository");
       }
 
+      // Reset form and close modal on success
       setRepoName("");
       setDescription("");
       setVisibility("public");

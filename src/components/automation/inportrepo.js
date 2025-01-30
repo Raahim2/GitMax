@@ -49,6 +49,10 @@ const ImportRepo = ({ isOpen, onClose }) => {
     repo.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const redirectToRepoPage = async (repo) => {
+    window.location.href = `/${session.user?.username}/automation/${repo.name}`;
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -89,7 +93,7 @@ const ImportRepo = ({ isOpen, onClose }) => {
                   <p>{repo.description}</p>
                   <span className="repo-owner">{repo.owner}</span>
                 </div>
-                <button className="import-button">Import</button>
+                <button className="import-button" onClick={() => redirectToRepoPage(repo)}>Import</button>
               </div>
             ))
           )}
