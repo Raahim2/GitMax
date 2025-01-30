@@ -1,414 +1,466 @@
-/* import-repo.css */
-
-/* Modal overlay */
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-  }
-
-  .radio-input {
-    display: none;
-  }
-  
-  /* Modal container */
-  .modal {
-    background: #ffffff;
-    border-radius: 12px;
-    width: 90%;
-    max-width: 600px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-  }
-  
-  /* Modal header */
-  .modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1.5rem;
-    border-bottom: 1px solid #eaeaea;
-  }
-  
-  .modal-header h2 {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #333;
-  }
-  
-  .close-button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 1.25rem;
-    color: #666;
-  }
-  
-  .close-button:hover {
-    color: #000;
-  }
-  
-  /* Search bar */
-  .search-bar {
-    display: flex;
-    align-items: center;
-    padding: 1rem 1.5rem;
-    border-bottom: 1px solid #eaeaea;
-  }
-  
-  .search-icon {
-    font-size: 1rem;
-    color: #666;
-    margin-right: 0.5rem;
-  }
-  
-  .search-bar input {
-    width: 100%;
-    border: none;
-    outline: none;
-    font-size: 1rem;
-    color: #333;
-  }
-  
-  .search-bar input::placeholder {
-    color: #999;
-  }
-  
-  /* Repository list */
-  .repo-list {
-    max-height: 400px;
-    overflow-y: auto;
-    padding: 1rem;
-  }
-  
-  .repo-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem;
-    border-bottom: 1px solid #eaeaea;
-  }
-  
-  .repo-item:last-child {
-    border-bottom: none;
-  }
-  
-  .repo-info h3 {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: #333;
-    margin-bottom: 0.25rem;
-  }
-  
-  .repo-info p {
-    font-size: 0.9rem;
-    color: #666;
-    margin-bottom: 0.25rem;
-  }
-  
-  .repo-owner {
-    font-size: 0.8rem;
-    color: #999;
-  }
-  
-  .import-button {
-    background: #000;
-    color: #fff;
-    border: none;
-    border-radius: 6px;
-    padding: 0.5rem 1rem;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-  }
-  
-  .import-button:hover {
-    background: #0070f3;
-  }
-
-  /* automation.css */
-
-/* Container for the boxes */
+/* Layout */
 .automation-container {
-    display: flex;
-    gap: 2rem;
-    justify-content: center;
-    align-items: center;
-    padding: 2rem;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-  
-  /* Individual box styling */
-  .automation-box {
-    background: #ffffff;
-    border: 1px solid #eaeaea;
-    border-radius: 12px;
-    padding: 2rem;
-    width: 100%;
-    max-width: 700px;
-    text-align: center;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-  
-  .automation-box:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-  }
-  
-  /* Icon container */
-  .icon-container {
-    margin-bottom: 1.5rem;
-  }
-  
-  /* Icon styling */
-  .automation-icon {
-    font-size: 2.5rem;
-    color: #000;
-    transition: color 0.2s ease;
-  }
-  
-  .automation-box:hover .automation-icon {
-    color: #0070f3; /* Change icon color on hover */
-  }
-  
-  /* Heading inside the box */
-  .automation-box h2 {
-    font-size: 1.5rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
-    color: #333;
-  }
-  
-  /* Paragraph inside the box */
-  .automation-box p {
-    font-size: 1rem;
-    color: #666;
-    margin-bottom: 1.5rem;
-  }
-  
-  /* Button styling */
-  .automation-button {
-    background-color: #000;
-    color: #fff;
-    border: none;
-    border-radius: 6px;
-    padding: 0.75rem 1.5rem;
-    font-size: 1rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-  }
-  
-  .automation-button:hover {
-    background-color: #0070f3; /* Change button color on hover */
-  }
-  
-  /* Responsive design */
-  @media (max-width: 768px) {
-    .automation-container {
-      flex-direction: column;
-      gap: 1.5rem;
-    }
-  
-    .automation-box {
-      max-width: 100%;
-    }
-  }
-
-  /* Add these to your existing automation.css */
-
-/* Form Styles */
-.repo-form {
-  padding: 1.5rem;
-}
-
-.form-group {
-  margin-bottom: 1.5rem;
-}
-
-.form-group label {
-  display: block;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-  color: #333;
-}
-
-.form-group input,
-.form-group textarea {
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #eaeaea;
-  border-radius: 6px;
-  font-size: 1rem;
-}
-
-.form-group textarea {
-  height: 100px;
-  resize: vertical;
-}
-
-/* Radio Buttons */
-.radio-group {
   display: flex;
-  gap: 1.5rem;
-  margin-top: 0.5rem;
+  gap: 2rem;
+  height: calc(100vh - 80px);
 }
 
-.radio-label {
+.repos-container,
+.templates-container {
+  flex: 1;
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease-in-out;
+}
+
+.repos-container:hover,
+.templates-container:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Repositories Section */
+.search-container {
+  position: relative;
+  margin: 1.5rem 0;
+}
+
+.search-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #666;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2.5rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  background: #f9f9f9;
+  transition: border 0.2s ease-in-out;
+}
+
+.search-input:focus {
+  border-color: #333;
+  background: white;
+  outline: none;
+}
+
+.repo-list {
+  max-height: calc(100vh - 250px);
+  overflow-y: auto;
+  padding-right: 5px;
+}
+
+.repo-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border: 1px solid #eaeaea;
+  border-radius: 8px;
+  margin-bottom: 0.75rem;
+  transition: all 0.2s ease-in-out;
+  background: #fff;
+}
+
+.repo-item:hover {
+  border-color: #333;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.repo-content {
+  flex: 1;
+}
+
+.repo-meta-top {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  cursor: pointer;
+  margin-bottom: 0.25rem;
 }
 
-.radio-custom {
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-  border: 2px solid #666;
-  border-radius: 50%;
-  position: relative;
-}
-
-.radio-label input:checked + .radio-custom {
-  border-color: #0070f3;
-}
-
-.radio-label input:checked + .radio-custom::after {
-  content: "";
-  width: 8px;
-  height: 8px;
-  background: #0070f3;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-}
-
-/* Form Actions */
-.form-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 1rem;
-  margin-top: 1.5rem;
-}
-
-.cancel-button {
-  background: none;
-  border: 1px solid #eaeaea;
-  color: #666;
-  padding: 0.75rem 1.5rem;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.create-button {
-  background: #000;
-  color: #fff;
-  border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: "background 0.2s ease";
-}
-
-.create-button:hover {
-  background: #0070f3;
-}
-
-.loading-message,
-.error-message,
-.empty-message {
-  padding: 20px;
-  text-align: center;
-  color: #666;
-}
-
-
-.visibility-badge {
-  background-color: #e5e7eb;
-  color: #374151;
+.repo-visibility {
   font-size: 0.75rem;
-  padding: 2px 6px;
-  border-radius: 4px;
-  margin-left: 8px;
-  border: 1px solid #d1d5db;
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  text-transform: capitalize;
+  background: #f5f5f5;
+  color: #333;
+  font-weight: 500;
 }
 
-.error-message {
-  color: #ff4444;
-  padding: 10px;
-  margin-bottom: 15px;
-  background: #fff5f5;
-  border-radius: 4px;
-  border: 1px solid #ffd6d6;
+.repo-username {
+  font-size: 0.875rem;
+  color: #777;
 }
 
-.create-button:disabled {
-  background-color: #94a3b8;
-  cursor: not-allowed;
+.repo-name {
+  font-size: 1.1rem;
+  margin: 0.5rem 0;
+  color: #222;
+  font-weight: bold;
 }
 
-input:disabled, textarea:disabled {
-  background-color: #f1f5f9;
-  cursor: not-allowed;
+.repo-description {
+  font-size: 0.875rem;
+  color: #555;
+  margin-bottom: 0.5rem;
 }
 
-/* Notification styles */
-.notification {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  padding: 15px 25px;
-  border-radius: 8px;
+.repo-meta-bottom {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.75rem;
+  color: #666;
+}
+
+.import-repo-btn {
+  background: white;
+  border: 1px solid #333;
+  color: #333;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+}
+
+.import-repo-btn:hover {
+  background: #333;
   color: white;
+}
+
+/* Keep "Create New" title fixed */
+.section-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/* Scrollable Grid */
+.templates-grid {
+  max-height: calc(100vh - 160px);
+  overflow-y: auto; /* Enable vertical scrolling */
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  padding: 10px; /* Prevent scrollbar overlap */
+}
+
+/* Template Card */
+.template-card {
+  padding: 1.5rem;
+  border: 1px solid #eaeaea;
+  border-radius: 8px;
+  text-align: center;
+  transition: all 0.3s ease-in-out;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.template-card:hover {
+  border-color: #333;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+}
+
+/* Template Image */
+.template-image {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  margin: 0 auto 1rem;
+}
+
+/* Template Name */
+.template-name {
+  font-size: 1rem;
+  margin: 0.5rem 0;
+  color: #333;
+  font-weight: bold;
+}
+
+/* Template Description */
+.template-description {
+  font-size: 0.875rem;
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+/* Custom Scrollbar for Grid */
+.templates-grid::-webkit-scrollbar {
+  width: 6px;
+}
+
+.templates-grid::-webkit-scrollbar-thumb {
+  background: #bbb;
+  border-radius: 6px;
+}
+
+.templates-grid::-webkit-scrollbar-track {
+  background: #f5f5f5;
+}
+
+/* Smooth Scrolling */
+.templates-grid,
+.repo-list {
+  scroll-behavior: smooth;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .automation-container {
+    flex-direction: column;
+    height: auto; /* Allow full height instead of fixed */
+    overflow-y: auto; /* Enable scrolling */
+  }
+
+  .repos-container,
+  .templates-container {
+    flex: none; /* Prevent shrinking */
+    width: 100%;
+    min-height: 50vh; /* Ensure both sections are visible */
+  }
+
+  
+}
+
+
+/* Elegant Scrollbar Styling */
+/* WebKit Browsers (Chrome, Edge, Safari) */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f5f5f5;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c0c0c0;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #c0c0c0 #f5f5f5;
+}
+
+
+
+
+
+
+
+
+
+/* Modal Overlay */
+.create-repo-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Modal Box */
+.create-repo-modal {
+  background-color: #fff;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 500px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  position: relative;
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Modal Header */
+.create-repo-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.create-repo-modal-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.create-repo-modal-close-btn {
+  background: none;
+  border: none;
+  color: #999;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+/* Form Group */
+.create-repo-form-group {
+  margin-bottom: 20px;
+}
+
+.create-repo-form-group label {
+  font-size: 1rem;
+  color: #555;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.create-repo-form-group input,
+.create-repo-form-group textarea {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+  color: #333;
+}
+
+.create-repo-form-group textarea {
+  height: 100px;
+  resize: none;
+}
+
+/* Radio Group */
+.create-repo-radio-group {
+  display: flex;
+  gap: 20px;
+  margin-top: 10px;
+}
+
+.create-repo-radio-label {
+  font-size: 1rem;
   display: flex;
   align-items: center;
-  gap: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
+  cursor: pointer;
 }
 
-.notification.success {
-  background: #38a169;
-  border: 1px solid #2f855a;
+.create-repo-radio-input {
+  margin-right: 8px;
+  cursor: pointer;
 }
 
-.notification.error {
-  background: #e53e3e;
-  border: 1px solid #c53030;
+/* Button Group */
+.create-repo-form-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.notification-content {
+.create-repo-cancel-btn,
+.create-repo-create-btn {
+  padding: 10px 20px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.create-repo-cancel-btn {
+  background-color: #f0f0f0;
+  color: #555;
+}
+
+.create-repo-create-btn {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.create-repo-cancel-btn:hover {
+  background-color: #e0e0e0;
+}
+
+.create-repo-create-btn:hover {
+  background-color: #0056b3;
+}
+
+/* Error and Notification Messages */
+.create-repo-error-message {
+  color: #d9534f;
+  font-size: 1rem;
+  margin-bottom: 20px;
+}
+
+.create-repo-notification {
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 4px;
   display: flex;
   align-items: center;
-  gap: 8px;
 }
 
-.notification-icon {
-  font-size: 1.2rem;
+.create-repo-notification.success {
+  background-color: #d4edda;
+  color: #155724;
 }
 
-.notification-close {
+.create-repo-notification.error {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.create-repo-notification-icon {
+  margin-right: 10px;
+  font-size: 1.5rem;
+}
+
+.create-repo-notification-close {
+  margin-left: auto;
   background: none;
   border: none;
   color: inherit;
+  font-size: 1.2rem;
   cursor: pointer;
-  margin-left: 15px;
-  padding: 0;
-  opacity: 0.8;
 }
 
-.notification-close:hover {
-  opacity: 1;
+/* Animation for Modal */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.template-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.template-icon {
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+}
+
+.template-name {
+  font-size: 18px;
+  font-weight: bold;
 }

@@ -1,10 +1,10 @@
 "use client";
 
-import { useState , useEffect } from "react";
+import { useState, useEffect } from "react";
 import { FaTimes, FaCheckCircle, FaExclamationCircle } from "react-icons/fa";
 import { useSession } from "next-auth/react";
 
-const CreateRepoModal = ({ isOpen, onClose }) => {
+const CreateRepoModal = ({ isOpen, onClose, template }) => {
   const [repoName, setRepoName] = useState("");
   const [description, setDescription] = useState("");
   const [visibility, setVisibility] = useState("public");
@@ -56,10 +56,9 @@ const CreateRepoModal = ({ isOpen, onClose }) => {
 
       setNotification({
         type: 'success',
-        message: 'Repository created successfully!'
+        message: 'Repository created successfully!',
       });
       setTimeout(onClose, 2000); // Close modal after 2 seconds
-
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -80,24 +79,22 @@ const CreateRepoModal = ({ isOpen, onClose }) => {
     }
   };
 
-
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay">
-      <div className="modal">
-
-      {notification && (
-          <div className={`notification ${notification.type}`}>
-            <div className="notification-content">
+    <div className="create-repo-modal-overlay">
+      <div className="create-repo-modal">
+        {notification && (
+          <div className={`create-repo-notification ${notification.type}`}>
+            <div className="create-repo-notification-content">
               {notification.type === 'success' ? (
-                <FaCheckCircle className="notification-icon" />
+                <FaCheckCircle className="create-repo-notification-icon" />
               ) : (
-                <FaExclamationCircle className="notification-icon" />
+                <FaExclamationCircle className="create-repo-notification-icon" />
               )}
               <span>{notification.message}</span>
               <button 
-                className="notification-close"
+                className="create-repo-notification-close"
                 onClick={() => setNotification(null)}
               >
                 <FaTimes />
@@ -105,18 +102,24 @@ const CreateRepoModal = ({ isOpen, onClose }) => {
             </div>
           </div>
         )}
-        
-        <div className="modal-header">
+
+        {/* Framework Template Information */}
+        <div className="template-info">
+          <img src={template.image} alt={`${template.name} logo`} className="template-icon" />
+          <span className="template-name">{template.name}</span>
+        </div>
+
+        <div className="create-repo-modal-header">
           <h2>Create New Repository</h2>
-          <button onClick={onClose} className="close-button">
+          <button onClick={onClose} className="create-repo-modal-close-btn">
             <FaTimes />
           </button>
         </div>
-        
-        <form className="repo-form" onSubmit={handleSubmit}>
-          {error && <div className="error-message">{error}</div>}
 
-          <div className="form-group">
+        <form className="repo-form" onSubmit={handleSubmit}>
+          {error && <div className="create-repo-error-message">{error}</div>}
+
+          <div className="create-repo-form-group">
             <label>Repository name</label>
             <input
               type="text"
@@ -127,7 +130,7 @@ const CreateRepoModal = ({ isOpen, onClose }) => {
             />
           </div>
 
-          <div className="form-group">
+          <div className="create-repo-form-group">
             <label>Description (optional)</label>
             <textarea
               value={description}
@@ -137,38 +140,38 @@ const CreateRepoModal = ({ isOpen, onClose }) => {
             />
           </div>
 
-          <div className="form-group">
+          <div className="create-repo-form-group">
             <label>Visibility</label>
-            <div className="radio-group">
-              <label className="radio-label">
+            <div className="create-repo-radio-group">
+              <label className="create-repo-radio-label">
                 <input
                   type="radio"
                   value="public"
                   checked={visibility === "public"}
                   onChange={() => setVisibility("public")}
                   disabled={loading}
+                  className="create-repo-radio-input"
                 />
-                <span className="radio-custom"></span>
                 Public
               </label>
-              <label className="radio-label">
+              <label className="create-repo-radio-label">
                 <input
                   type="radio"
                   value="private"
                   checked={visibility === "private"}
                   onChange={() => setVisibility("private")}
                   disabled={loading}
+                  className="create-repo-radio-input"
                 />
-                <span className="radio-custom"></span>
                 Private
               </label>
             </div>
           </div>
 
-          <div className="form-actions">
+          <div className="create-repo-form-actions">
             <button 
               type="button" 
-              className="cancel-button" 
+              className="create-repo-cancel-btn" 
               onClick={onClose}
               disabled={loading}
             >
@@ -176,7 +179,7 @@ const CreateRepoModal = ({ isOpen, onClose }) => {
             </button>
             <button 
               type="submit" 
-              className="create-button"
+              className="create-repo-create-btn"
               disabled={loading || !repoName.trim()}
             >
               {loading ? "Creating..." : "Create Repository"}
