@@ -1,0 +1,323 @@
+/* import-repo.css */
+
+/* Modal overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  /* Modal container */
+  .modal {
+    background: #ffffff;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+  
+  /* Modal header */
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    border-bottom: 1px solid #eaeaea;
+  }
+  
+  .modal-header h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #333;
+  }
+  
+  .close-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.25rem;
+    color: #666;
+  }
+  
+  .close-button:hover {
+    color: #000;
+  }
+  
+  /* Search bar */
+  .search-bar {
+    display: flex;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #eaeaea;
+  }
+  
+  .search-icon {
+    font-size: 1rem;
+    color: #666;
+    margin-right: 0.5rem;
+  }
+  
+  .search-bar input {
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    color: #333;
+  }
+  
+  .search-bar input::placeholder {
+    color: #999;
+  }
+  
+  /* Repository list */
+  .repo-list {
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 1rem;
+  }
+  
+  .repo-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid #eaeaea;
+  }
+  
+  .repo-item:last-child {
+    border-bottom: none;
+  }
+  
+  .repo-info h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.25rem;
+  }
+  
+  .repo-info p {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 0.25rem;
+  }
+  
+  .repo-owner {
+    font-size: 0.8rem;
+    color: #999;
+  }
+  
+  .import-button {
+    background: #000;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .import-button:hover {
+    background: #0070f3;
+  }
+
+  /* automation.css */
+
+/* Container for the boxes */
+.automation-container {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  /* Individual box styling */
+  .automation-box {
+    background: #ffffff;
+    border: 1px solid #eaeaea;
+    border-radius: 12px;
+    padding: 2rem;
+    width: 100%;
+    max-width: 700px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .automation-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Icon container */
+  .icon-container {
+    margin-bottom: 1.5rem;
+  }
+  
+  /* Icon styling */
+  .automation-icon {
+    font-size: 2.5rem;
+    color: #000;
+    transition: color 0.2s ease;
+  }
+  
+  .automation-box:hover .automation-icon {
+    color: #0070f3; /* Change icon color on hover */
+  }
+  
+  /* Heading inside the box */
+  .automation-box h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #333;
+  }
+  
+  /* Paragraph inside the box */
+  .automation-box p {
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 1.5rem;
+  }
+  
+  /* Button styling */
+  .automation-button {
+    background-color: #000;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .automation-button:hover {
+    background-color: #0070f3; /* Change button color on hover */
+  }
+  
+  /* Responsive design */
+  @media (max-width: 768px) {
+    .automation-container {
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+  
+    .automation-box {
+      max-width: 100%;
+    }
+  }
+
+  /* Add these to your existing automation.css */
+
+/* Form Styles */
+.repo-form {
+  padding: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #eaeaea;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.form-group textarea {
+  height: 100px;
+  resize: vertical;
+}
+
+/* Radio Buttons */
+.radio-group {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 0.5rem;
+}
+
+.radio-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.radio-custom {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #666;
+  border-radius: 50%;
+  position: relative;
+}
+
+.radio-label input:checked + .radio-custom {
+  border-color: #0070f3;
+}
+
+.radio-label input:checked + .radio-custom::after {
+  content: "";
+  width: 8px;
+  height: 8px;
+  background: #0070f3;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+}
+
+/* Form Actions */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.cancel-button {
+  background: none;
+  border: 1px solid #eaeaea;
+  color: #666;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.create-button {
+  background: #000;
+  color: #fff;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: "background 0.2s ease";
+}
+
+.create-button:hover {
+  background: #0070f3;
+}

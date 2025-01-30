@@ -1,65 +1,81 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useParams } from "next/navigation";
 import React from "react";
 import Sidebar from "@/components/dashboard/sidebar";
 import NavBar from "@/components/dashboard/navbar";
 import MobileBar from "@/components/dashboard/mobilebar";
+import ImportRepo from "@/components/automation/inportrepo"; 
+import CreateRepoModal from "@/components/automation/newrepo";
 import "@/styles/dashboard.css";
+import "@/styles/automation.css"
+import { FaDownload , FaPlus } from "react-icons/fa";
 
 export default function AutomationPage() {
   const { username } = useParams();
   const githubToken = process.env.NEXT_PUBLIC_GITHUB_TOKEN;
-  const [isSidebarContentVisible, setIsSidebarContentVisible] = useState(true); // State to manage sidebar content class
-  
+  const [isSidebarContentVisible, setIsSidebarContentVisible] = useState(true);
+  const [isImportModalOpen, setIsImportModalOpen] = useState(false); // State for modal
+  const [isNewRepoModalOpen, setIsNewRepoModalOpen] = useState(false);
+
   const toggleSidebarContent = () => {
-    setIsSidebarContentVisible((prev) => !prev); // Toggle sidebar content class
+    setIsSidebarContentVisible((prev) => !prev);
+  };
+
+  const openImportModal = () => {
+    setIsImportModalOpen(true);
+  };
+
+  const closeImportModal = () => {
+    setIsImportModalOpen(false);
+  };
+
+  const openNewRepoModal = () => {
+    setIsNewRepoModalOpen(true);
+  };
+
+  const closeNewRepoModal = () => {
+    setIsNewRepoModalOpen(false);
   };
 
   return (
     <div>
-      <Sidebar highlight="Automation" username={username} className={isSidebarContentVisible ? "sidebar-content" : ""} />
+      <Sidebar
+        highlight="Automation"
+        username={username}
+        className={isSidebarContentVisible ? "sidebar-content" : ""}
+      />
       <NavBar username={username} githubToken={githubToken} />
-      <MobileBar username={username} toggleSidebarContent={toggleSidebarContent}/>
+      <MobileBar username={username} toggleSidebarContent={toggleSidebarContent} />
       <div className="dashboard-content">
-        <div className="dashboard-container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '20px' }}>
-          <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>Automation Options</h2>
-          <div style={{ display: 'flex', justifyContent: 'space-around', width: '100%', flexWrap: 'wrap' }}>
-            {/* Import GitHub Repo Box */}
-            <div style={{ 
-              backgroundColor: '#ffffff', 
-              borderRadius: '10px', 
-              boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', 
-              padding: '20px', 
-              margin: '10px', 
-              flex: '1 1 300px', // Flex properties for responsive design
-              textAlign: 'center',
-              cursor: 'pointer',
-              transition: 'transform 0.2s',
-            }} onClick={() => alert('Import a GitHub repo')}>
-              <h3>Import a GitHub Repo</h3>
-              <p>Connect your GitHub account and import an existing repository.</p>
+        <div className="automation-container">
+          <div className="automation-box">
+            <div className="icon-container">
+              <FaDownload className="automation-icon" />
             </div>
+            <h2>Import a GitHub Repo</h2>
+            <p>Bring an existing repository for automation.</p>
+            <button className="automation-button" onClick={openImportModal}>
+              Import Repository
+            </button>
+          </div>
+          <div className="automation-box">
+            <div className="icon-container">
+              <FaPlus className="automation-icon" />
 
-            {/* Create New GitHub Repo Box */}
-            <div style={{ 
-              backgroundColor: '#ffffff', 
-              borderRadius: '10px', 
-              boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', 
-              padding: '20px', 
-              margin: '10px', 
-              flex: '1 1 300px', // Flex properties for responsive design
-              textAlign: 'center',
-              cursor: 'pointer',
-              transition: 'transform 0.2s',
-            }} onClick={() => alert('Create a new GitHub repo')}>
-              <h3>Create a New GitHub Repo</h3>
-              <p>Start a new project by creating a new repository on GitHub.</p>
             </div>
+            <h2>Create a New GitHub Repo</h2>
+            <p>Start Automating fresh with a new repository.</p>
+            <button className="automation-button" onClick={openNewRepoModal}>
+              Create Repository
+            </button>
           </div>
         </div>
       </div>
+      <ImportRepo isOpen={isImportModalOpen} onClose={closeImportModal} />
+      <CreateRepoModal isOpen={isNewRepoModalOpen} onClose={closeNewRepoModal} />
+
     </div>
   );
 }
