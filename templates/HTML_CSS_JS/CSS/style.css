@@ -1,0 +1,67 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #fef1f1; /* Light pinkish background */
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Full viewport height */
+    margin: 0;
+}
+
+.container {
+    width: 90%; /* 90% of the screen width */
+    max-width: 500px; /* Max width set to 500px */
+    height: 60%; /* 60% of the screen height */
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.header {
+    background-color: #D32F2F; /* Strong red */
+    padding: 30px;
+    color: white;
+    text-align: center;
+    border-bottom: 4px solid #B71C1C; /* Darker red bottom border */
+}
+
+.main-content {
+    padding: 40px 20px;
+    text-align: center;
+}
+
+button {
+    background-color: #D32F2F; /* Strong red */
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+    background-color: #B71C1C; /* Darker red on hover */
+    transform: scale(1.05); /* Slight scale effect on hover */
+}
+
+.footer {
+    text-align: center;
+    background-color: #fff0f0; /* Light pink footer */
+    padding: 15px;
+    font-size: 14px;
+    color: #666;
+    border-top: 2px solid #eee;
+}
