@@ -26,21 +26,22 @@ const CreateRepoModal = ({ isOpen, onClose, template }) => {
     e.preventDefault();
     setError("");
     setLoading(true);
-
+  
     if (!session?.accessToken) {
       setError("Not authenticated with GitHub");
       setLoading(false);
       return;
     }
-
+  
     if (!repoName.trim()) {
       setError("Repository name is required");
       setLoading(false);
       return;
     }
-
+  
     try {
-      const response = await fetch("https://api.github.com/user/repos", {
+      // Create the new repository
+      const createRepoResponse = await fetch("https://api.github.com/user/repos", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${session.accessToken}`,
@@ -51,33 +52,119 @@ const CreateRepoModal = ({ isOpen, onClose, template }) => {
           name: repoName.trim(),
           description: description.trim(),
           private: visibility === "private",
+          auto_init: true, // Initialize with a README
         }),
       });
-
-      setNotification({
-        type: 'success',
-        message: 'Repository created successfully!',
-      });
-      setTimeout(onClose, 2000); // Close modal after 2 seconds
-
-      if (!response.ok) {
-        const errorData = await response.json();
+  
+      if (!createRepoResponse.ok) {
+        const errorData = await createRepoResponse.json();
         throw new Error(errorData.message || "Failed to create repository");
       }
-
-      // Reset form and close modal on success
+  
+      const repoData = await createRepoResponse.json();
+  
+      // Specify the folder to download
+      const owner = 'Raahim2';
+      const repo = 'GitMax';
+      const folderPath = 'public'; // Update with the specific folder path
+      const branch = 'master'; // Specify the branch if needed
+  
+      // Fetch contents of a directory from the specified repository
+      const fetchFolderContents = async (path = '') => {
+        const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${branch}`);
+        if (!response.ok) {
+          throw new Error(`Failed to fetch contents from ${owner}/${repo}/${path}`);
+        }
+        return response.json();
+      };
+  
+      // Handle file upload (create or update)
+      const handleFileUpload = async (filePath, content) => {
+        const response = await fetch(`https://api.github.com/repos/${repoData.full_name}/contents/${filePath}`);
+        
+        if (response.ok) {
+          const fileData = await response.json();
+          const sha = fileData.sha; // Get current SHA for updating
+  
+          // Update existing file
+          await fetch(`https://api.github.com/repos/${repoData.full_name}/contents/${filePath}`, {
+            method: "PUT",
+            headers: {
+              Authorization: `Bearer ${session.accessToken}`,
+              Accept: "application/vnd.github.v3+json",
+            },
+            body: JSON.stringify({
+              message: `Update ${filePath}`,
+              content: btoa(content), // Base64 encode content
+              sha: sha, // Include SHA for update
+              branch: 'main',
+            }),
+          });
+        } else if (response.status === 404) {
+          // Create new file if it doesn't exist
+          await fetch(`https://api.github.com/repos/${repoData.full_name}/contents/${filePath}`, {
+            method: "PUT",
+            headers: {
+              Authorization: `Bearer ${session.accessToken}`,
+              Accept: "application/vnd.github.v3+json",
+            },
+            body: JSON.stringify({
+              message: `Create ${filePath}`,
+              content: btoa(content), // Base64 encode content
+              branch: 'main',
+            }),
+          });
+        } else {
+          throw new Error("Failed to check file existence");
+        }
+      };
+  
+      // Recursively process files and directories from the specified folder
+      const processContents = async (items, basePath = '') => {
+        for (const item of items) {
+          const itemPath = basePath ? `${basePath}/${item.name}` : item.name; // Construct full path
+          
+          if (item.type === 'file') {
+            const fileContentResponse = await fetch(item.download_url);
+            if (!fileContentResponse.ok) {
+              throw new Error(`Failed to fetch ${item.name} from template repository`);
+            }
+            const fileContent = await fileContentResponse.text();
+            await handleFileUpload(itemPath, fileContent);
+          } else if (item.type === 'dir') {
+            const nestedContents = await fetchFolderContents(item.path);
+            await processContents(nestedContents, itemPath); // Recursively process subdirectory
+          }
+        }
+      };
+  
+      // Start processing the contents of the specified folder
+      const contents = await fetchFolderContents(folderPath);
+      await processContents(contents);
+  
+      setNotification({
+        type: "success",
+        message: `Repository created and folder contents uploaded successfully!`,
+      });
+  
+      setTimeout(onClose, 2000);
+    } catch (err) {
+      setNotification({
+        type: "error",
+        message: err.message,
+      });
+      console.error("Error during repository creation:", err);
+    } finally {
+      setLoading(false);
       setRepoName("");
       setDescription("");
       setVisibility("public");
-    } catch (err) {
-      setNotification({
-        type: 'error',
-        message: err.message
-      });
-    } finally {
-      setLoading(false);
     }
   };
+  
+  
+  
+
 
   if (!isOpen) return null;
 
