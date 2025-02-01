@@ -7,41 +7,23 @@ import Sidebar from "@/components/dashboard/sidebar";
 import NavBar from "@/components/dashboard/navbar";
 import MobileBar from "@/components/dashboard/mobilebar";
 import "@/styles/dashboard.css";
+import AutomationCard from "@/components/automation/automationcard";
 
 export default function ProfilePage() {
   const { username } = useParams();
   const githubToken = process.env.NEXT_PUBLIC_GITHUB_TOKEN;
   const [isSidebarContentVisible, setIsSidebarContentVisible] = useState(true); // State to manage sidebar content class
-  const [userData, setUserData] = useState(null); // State to hold user data
-  const [loading, setLoading] = useState(true); // State to manage loading state
-  const [error, setError] = useState(null); // State to manage error state
 
   const toggleSidebarContent = () => {
     setIsSidebarContentVisible((prev) => !prev); // Toggle sidebar content class
   };
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await fetch(`https://api.github.com/users/${username}`, {
-          headers: {
-            Authorization: `token ${githubToken}`,
-          },
-        });
-        if (!response.ok) {
-          throw new Error('Failed to fetch user data');
-        }
-        const data = await response.json();
-        setUserData(data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
+  
 
-    fetchUserData();
-  }, [username, githubToken]);
+
+
+
+  
 
   return (
     <div>
@@ -49,22 +31,22 @@ export default function ProfilePage() {
       <NavBar username={username} githubToken={githubToken} />
       <MobileBar username={username} toggleSidebarContent={toggleSidebarContent}/>
       <div className="dashboard-content">
-        <div className="dashboard-container">
-          {loading && <p>Loading...</p>}
-          {error && <p>Error: {error}</p>}
-          {userData && (
-            <div className="profile-info">
-              <img src={userData.avatar_url} alt={`${userData.login}'s avatar`} className="profile-avatar" />
-              <h2>{userData.name || userData.login}</h2>
-              <p>{userData.bio}</p>
-              <p><strong>Location:</strong> {userData.location || 'Not specified'}</p>
-              <p><strong>Followers:</strong> {userData.followers}</p>
-              <p><strong>Following:</strong> {userData.following}</p>
-              <p><strong>Public Repos:</strong> {userData.public_repos}</p>
-              <a href={userData.html_url} target="_blank" rel="noopener noreferrer">View Profile on GitHub</a>
+      <div class="dashboard-container">
+      <div class="w-layout-grid main-grid">
+            <div class="w-layout-grid _2-grid">
+              <AutomationCard projectname="GitMax" logo={"https://static.vecteezy.com/system/resources/previews/013/313/458/non_2x/html-icon-3d-rendering-illustration-vector.jpg"} percentage={5} />
+              <AutomationCard projectname="GitMax" logo={"https://static.vecteezy.com/system/resources/previews/013/313/458/non_2x/html-icon-3d-rendering-illustration-vector.jpg"} percentage={30} />
+              <AutomationCard projectname="GitMax" logo={"https://static.vecteezy.com/system/resources/previews/013/313/458/non_2x/html-icon-3d-rendering-illustration-vector.jpg"} percentage={50} />
+              <AutomationCard projectname="GitMax" logo={"https://static.vecteezy.com/system/resources/previews/013/313/458/non_2x/html-icon-3d-rendering-illustration-vector.jpg"} percentage={70} />
+
+              <AutomationCard projectname="Flask" logo={"https://upload.wikimedia.org/wikipedia/commons/3/3c/Flask_logo.svg"} percentage={100}/>
+
+
             </div>
-          )}
         </div>
+
+      </div>
+      
       </div>
     </div>
   );
