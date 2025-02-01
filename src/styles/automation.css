@@ -228,9 +228,15 @@
     width: 100%;
     min-height: 50vh; /* Ensure both sections are visible */
   }
-
-  
 }
+
+@media (max-width: 550px) {
+  .templates-grid {
+  grid-template-columns: repeat(1, 1fr);
+}
+}
+
+
 
 
 /* Elegant Scrollbar Styling */
