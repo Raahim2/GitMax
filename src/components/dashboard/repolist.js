@@ -23,7 +23,7 @@ const colorMap = {
 };
 
 const getLanguageColor = (language) => {
-  return colorMap[language] || "default-lang"; // Default class for unknown languages
+  return colorMap[language] || "default-lang"; // Default className for unknown languages
 };
 
 const RepoList = ({ username, projectsPerPage, githubToken }) => {

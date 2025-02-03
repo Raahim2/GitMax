@@ -9,7 +9,7 @@ export default function MobileBar({ username, toggleSidebarContent }) {
 
   const handleToggle = () => {
     setIsSidebarOpen(!isSidebarOpen); // Toggle sidebar state
-    toggleSidebarContent(); // Call the function to toggle sidebar content class
+    toggleSidebarContent(); // Call the function to toggle sidebar content className
   };
 
   return (

@@ -63,32 +63,26 @@ const InfoGrid = ({ username  , githubToken}) => {
       <InfoCard
         caption="Followers"
         value={profileData.followers}
-        logo="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605882d03baf8a2d544bd28f_dollar-sign.svg"
       />
       <InfoCard
         caption="Repositories"
         value={repos.length}
-        logo="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605882d03baf8a2d544bd28f_dollar-sign.svg"
       />
       <InfoCard
         caption="Stars"
         value={totalStars}
-        logo="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605882d03baf8a2d544bd28f_dollar-sign.svg"
       />
       <InfoCard
         caption="Fork"
         value={totalForks}
-        logo="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605882d03baf8a2d544bd28f_dollar-sign.svg"
       />
       <InfoCard
         caption="Code Data"
         value={totalSize + " MB"}
-        logo="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605882d03baf8a2d544bd28f_dollar-sign.svg"
       />
       <InfoCard
         caption="Lines Of Code"
         value={totalLines + " Lines"}
-        logo="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605882d03baf8a2d544bd28f_dollar-sign.svg"
       />
     </div>
   );

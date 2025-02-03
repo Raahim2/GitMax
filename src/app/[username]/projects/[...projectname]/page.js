@@ -23,10 +23,10 @@ export default function ProjectStructure() {
   const projectName = projectPathArray[0] || ""; // First element as project name
   const folderPaths = projectPathArray.slice(1); // Remaining elements as folder paths
 
-  const [isSidebarContentVisible, setIsSidebarContentVisible] = useState(true); // State to manage sidebar content class
+  const [isSidebarContentVisible, setIsSidebarContentVisible] = useState(true); // State to manage sidebar content className
 
   const toggleSidebarContent = () => {
-      setIsSidebarContentVisible((prev) => !prev); // Toggle sidebar content class
+      setIsSidebarContentVisible((prev) => !prev); // Toggle sidebar content className
   };
 
 

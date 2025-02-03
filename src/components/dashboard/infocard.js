@@ -1,6 +1,6 @@
 "use client";
 
-export default function InfoCard({caption , value , logo}) {
+export default function InfoCard({caption , value }) {
   return (
     <div className="module">
       <div className="content-chart">
