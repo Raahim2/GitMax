@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { FaTimes, FaCheckCircle, FaExclamationCircle } from "react-icons/fa";
 import { useSession } from "next-auth/react";
+import { addData } from "@/lib/database";
 
 const CreateRepoModal = ({ isOpen, onClose, template }) => {
   const [repoName, setRepoName] = useState("");
@@ -12,6 +13,8 @@ const CreateRepoModal = ({ isOpen, onClose, template }) => {
   const [error, setError] = useState("");
   const { data: session } = useSession();
   const [notification, setNotification] = useState(null);
+  const API_KEY = process.env.NEXT_PUBLIC_PROJECT_CUSTOM_API;
+
 
   useEffect(() => {
     if (notification) {
@@ -150,6 +153,17 @@ const CreateRepoModal = ({ isOpen, onClose, template }) => {
         // Start processing the contents of the specified folder
         const contents = await fetchFolderContents(templateFolderPath);
         await processContents(contents);
+
+        // Store the repository information in the database
+        const repoDocument = {
+            githubUsername: session.user.username,
+            repoName: repoData.name,
+            repoUrl: repoData.html_url,
+            visibility: repoData.private ? "private" : "public",
+            template: template.name,
+            createdAt: new Date().toISOString(),
+        };
+        await addData(API_KEY, "GitMax", "Automations", repoDocument);
 
         setNotification({
             type: "success",

@@ -7,8 +7,7 @@ const Navbar = () => {
   const router = useRouter();
 
   const handleSignIn = async () => {
-    // Sign in with GitHub
-    await signIn("github"); // No callbackUrl here
+    await signIn("github"); 
   };
 
   useEffect(() => {

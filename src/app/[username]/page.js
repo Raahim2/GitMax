@@ -12,73 +12,23 @@ import BarChart from "@/components/dashboard/barchart";
 import LineChart from "@/components/dashboard/linechart"; 
 import RepoList from "@/components/dashboard/repolist";
 import InfoGrid from "@/components/dashboard/infogrid";
+import { fetchData, addData } from "@/lib/database";
 import "@/styles/dashboard.css";
 
 export default function Dashboard() {
     const { username } = useParams(); 
     const { data: session } = useSession(); 
     const githubToken = process.env.NEXT_PUBLIC_GITHUB_TOKEN;
+    const API_KEY = process.env.NEXT_PUBLIC_PROJECT_CUSTOM_API;
+
 
     const [isSidebarContentVisible, setIsSidebarContentVisible] = useState(true); 
     const toggleSidebarContent = () => {
         setIsSidebarContentVisible((prev) => !prev); 
     };
 
-    const BASE_URL = "https://projects-api-three.vercel.app/DBMS"; 
-    const API_KEY = process.env.NEXT_PUBLIC_PROJECT_CUSTOM_API;
 
-    async function fetchData(apiKey, dbName, collectionName, filterCondition = {}) {
-        const endpoint = `${BASE_URL}/fetch`;
-        const payload = {
-            API_KEY: apiKey,
-            db_name: dbName,
-            collection_name: collectionName,
-            filter_condition: filterCondition
-        };
-        const headers = {
-            'Content-Type': 'application/json'
-        };
 
-        try {
-            const response = await fetch(endpoint, {
-                method: 'POST',
-                headers: headers,
-                body: JSON.stringify(payload)
-            });
-
-            if (response.status === 200) {
-                return await response.json();
-            } else {
-                console.error(`Failed to fetch data. Status code: ${response.status}`);
-                return null;
-            }
-        } catch (error) {
-            console.error("Error fetching data:", error);
-            return null;
-        }
-    }
-
-    async function addData(apiKey, dbName, collectionName, document) {
-        const endpoint = `${BASE_URL}/add_data`;
-        const payload = {
-            API_KEY: apiKey,
-            db_name: dbName,
-            collection_name: collectionName,
-            document: document
-        };
-
-        try {
-            await fetch(endpoint, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(payload)
-            });
-        } catch (error) {
-            console.error("Error adding data:", error);
-        }
-    }
 
     useEffect(() => {
         const storeUserInfo = async () => {

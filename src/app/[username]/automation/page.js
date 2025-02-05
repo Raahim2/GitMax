@@ -11,6 +11,8 @@ import "@/styles/dashboard.css";
 import "@/styles/automation.css";
 import { FaSearch, FaCodeBranch, FaPlus } from "react-icons/fa";
 import CreateRepoModal from "@/components/automation/newrepo";
+import { useRouter } from "next/navigation";
+import Modal from "@/components/dashboard/signinModal";
 
 const templates = [
   { name: "HTML_CSS_JS", image: "https://static.vecteezy.com/system/resources/previews/013/313/458/non_2x/html-icon-3d-rendering-illustration-vector.jpg" },
@@ -31,6 +33,12 @@ export default function AutomationPage() {
   const [repos, setRepos] = useState([]);
   const [isCreateRepoModalOpen, setIsCreateRepoModalOpen] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState(null);
+
+  if(session==null){
+    return <> <Modal isOpen={true} onClose={() => console.log("lol")} /> </>
+  }
+
+    
   
   // Fetch repos when the component mounts
   useEffect(() => {
