@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import { FaTimes, FaCheckCircle, FaExclamationCircle } from "react-icons/fa";
 import { useSession } from "next-auth/react";
 import { addData } from "@/lib/database";
+import { useRouter } from "next/navigation";
+
 
 const CreateRepoModal = ({ isOpen, onClose, template }) => {
   const [repoName, setRepoName] = useState("");
@@ -13,6 +15,7 @@ const CreateRepoModal = ({ isOpen, onClose, template }) => {
   const [error, setError] = useState("");
   const { data: session } = useSession();
   const [notification, setNotification] = useState(null);
+  const router = useRouter()
   const API_KEY = process.env.NEXT_PUBLIC_PROJECT_CUSTOM_API;
 
 
@@ -182,8 +185,10 @@ const CreateRepoModal = ({ isOpen, onClose, template }) => {
         setRepoName("");
         setDescription("");
         setVisibility("public");
+        router.push(`${window.location.pathname}/${repoName}`);
     }
 };
+
 
 
 

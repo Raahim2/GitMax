@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
-import { useSession } from "next-auth/react";  // Add this to access the session
+import { useSession } from "next-auth/react";
 import React from "react";
 import Sidebar from "@/components/dashboard/sidebar";
 import NavBar from "@/components/dashboard/navbar";
@@ -11,8 +11,9 @@ import "@/styles/dashboard.css";
 import "@/styles/automation.css";
 import { FaSearch, FaCodeBranch, FaPlus } from "react-icons/fa";
 import CreateRepoModal from "@/components/automation/newrepo";
-import { useRouter } from "next/navigation";
 import Modal from "@/components/dashboard/signinModal";
+import { addData } from "@/lib/database";
+import { useRouter } from "next/navigation";
 
 const templates = [
   { name: "HTML_CSS_JS", image: "https://static.vecteezy.com/system/resources/previews/013/313/458/non_2x/html-icon-3d-rendering-illustration-vector.jpg" },
@@ -25,7 +26,7 @@ const templates = [
 
 export default function AutomationPage() {
   const { username } = useParams();
-  const { data: session } = useSession(); // Get the session data to access the accessToken
+  const { data: session } = useSession();
   const AccessToken = session?.accessToken;
   const githubToken = process.env.NEXT_PUBLIC_GITHUB_TOKEN;
   const [isSidebarContentVisible, setIsSidebarContentVisible] = useState(true);
@@ -33,14 +34,10 @@ export default function AutomationPage() {
   const [repos, setRepos] = useState([]);
   const [isCreateRepoModalOpen, setIsCreateRepoModalOpen] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState(null);
+  const API_KEY = process.env.NEXT_PUBLIC_PROJECT_CUSTOM_API;
+  const router = useRouter();
+console.log(session)
 
-  if(session==null){
-    return <> <Modal isOpen={true} onClose={() => console.log("lol")} /> </>
-  }
-
-    
-  
-  // Fetch repos when the component mounts
   useEffect(() => {
     if (AccessToken) {
       fetch(`https://api.github.com/user/repos`, {
@@ -72,6 +69,26 @@ export default function AutomationPage() {
     setIsCreateRepoModalOpen(true);
   };
 
+  const handleImport = async (repo) => {
+    try {
+      const repoDocument = {
+        githubUsername: session.user.username,
+        repoName: repo.name,
+        repoUrl: repo.html_url,
+        visibility: repo.private ? "private" : "public",
+        template: "BLANK",
+        createdAt: new Date().toISOString(),
+      };
+
+      await addData(API_KEY, "GitMax", "Automations", repoDocument);
+
+      router.push(`${window.location.pathname}/${repo.name}`);
+
+    } catch (error) {
+      console.error("Error importing repo:", error);
+    }
+  };
+
   return (
     <div>
       <Sidebar
@@ -84,7 +101,6 @@ export default function AutomationPage() {
 
       <div className="dashboard-content">
         <div className="automation-container">
-          {/* Repositories Container */}
           <div className="repos-container">
             <div className="repo-header">
               <h2 className="section-title">Import a Git Repository</h2>
@@ -105,7 +121,7 @@ export default function AutomationPage() {
                   <div className="repo-content">
                     <div className="repo-meta-top">
                       <span className="repo-visibility">{repo.visibility}</span>
-                      <span className="repo-username">/{username}</span>
+                      <span className="repo-username">/{session.user.username}</span>
                     </div>
                     <h3 className="repo-name">{repo.name}</h3>
                     <p className="repo-description">{truncateDescription(repo.description)}</p>
@@ -116,7 +132,7 @@ export default function AutomationPage() {
                       <span className="repo-updated">Updated {repo.updated_at}</span>
                     </div>
                   </div>
-                  <button className="import-repo-btn">
+                  <button className="import-repo-btn" onClick={() => handleImport(repo)}>
                     <FaPlus /> Import
                   </button>
                 </div>
@@ -124,7 +140,6 @@ export default function AutomationPage() {
             </div>
           </div>
 
-          {/* Templates Container */}
           <div className="templates-container">
             <div className="repo-header">
               <h2 className="section-title">Create a New Repository</h2>
