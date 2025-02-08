@@ -56,7 +56,7 @@ const BarChart = ({ username , githubToken }) => {
 
           // Process each commit to calculate lines of code
           commits.forEach((commit) => {
-            const commitDate = new Date(commit.committer.date);
+            const commitDate = new Date(commit.commitDate);
             const commitMonth = commitDate.getMonth();
             const commitYear = commitDate.getFullYear();
 

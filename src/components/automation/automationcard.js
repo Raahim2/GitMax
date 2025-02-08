@@ -1,5 +1,6 @@
 import React from 'react';
 import { FaGithub, FaArrowRight } from 'react-icons/fa';
+import { useRouter } from 'next/navigation';
 
 // Inline Styles as JavaScript Object
 const styles = {
@@ -109,9 +110,15 @@ const AutomationCard = ({ projectname, logo, percentage, visibility, createdAt, 
     const radius = 45; // Radius of the progress circle
     const circumference = 2 * Math.PI * radius; // Circumference of the circle
     const progress = (percentage * circumference) / 100; // Progress based on percentage
+    const router = useRouter()
+
+    const handleCardClick = () => {
+        router.push(`automation/${projectname}`)
+    };
+
 
     return (
-        <div style={styles.automationCard} className="automation-card">
+        <div style={styles.automationCard} className="automation-card" onClick={handleCardClick}>
             <div style={styles.header} className="header">
                 <div style={styles.projectInfo} className="project-info">
                     <div style={styles.storageSquare} className="storage-square">

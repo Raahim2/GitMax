@@ -11,6 +11,7 @@ import AutomationCard from "@/components/automation/automationcard";
 import { fetchData } from "@/lib/database";
 import { useSession } from "next-auth/react";
 import Modal from "@/components/dashboard/signinModal";
+import { useRouter } from "next/navigation";
 
 const templates = [
   { name: "HTML_CSS_JS", image: "https://static.vecteezy.com/system/resources/previews/013/313/458/non_2x/html-icon-3d-rendering-illustration-vector.jpg" },
@@ -19,6 +20,8 @@ const templates = [
   { name: "ReactNative Expo", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTh79Z8_dzeOvsP4I9tAsDh-C7MLePq7d2sRA&sg" },
   { name: "React Js", image: "https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg" },
   { name: "Django", image: "https://www.svgrepo.com/show/353657/django-icon.svg" },
+  { name: "BLANK", image: "https://www.perplexity.ai/favicon.ico" },
+
 ];
 
 export default function ProfilePage() {
@@ -27,13 +30,21 @@ export default function ProfilePage() {
   const API_KEY = process.env.NEXT_PUBLIC_PROJECT_CUSTOM_API;
   const [isSidebarContentVisible, setIsSidebarContentVisible] = useState(true);
   const [automationData, setAutomationData] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(true); 
   const{ data:session} = useSession();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const router = useRouter()
+
 
   const toggleSidebarContent = () => {
     setIsSidebarContentVisible((prev) => !prev);
   };
-  
+
+  useEffect(() => {
+    if (!session) {
+      setIsModalOpen(true);
+    }
+  }, [session]);
+
   
   // Fetch automation data when the component mounts
   useEffect(() => {
@@ -43,11 +54,11 @@ export default function ProfilePage() {
         setAutomationData(data); // Assuming data is an array of automation items
       }
     };
-
-    if (session.status === "authenticated") {
+    if(session){
       fetchAutomationCards();
     }
-  }, [API_KEY, session.status, session?.user?.username]);
+
+  }, [API_KEY, session]);
 
   // Function to get logo URL based on template name
   const getLogoByTemplateName = (templateName) => {
@@ -55,10 +66,11 @@ export default function ProfilePage() {
     return template ? template.image : ""; // Return empty string if not found
   };
 
-  // Close modal handler
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
+  
+
+  if (!session) {
+    return <Modal isOpen={isModalOpen} onClose={router.back} />;
+  }
 
   return (
     <div>
@@ -69,24 +81,20 @@ export default function ProfilePage() {
         <div className="dashboard-container">
           <div className="w-layout-grid main-grid">
             <div className="w-layout-grid _2-grid">
-              {session.status === "authenticated" ? (
-                automationData.length > 0 ? (
-                  automationData.map((project) => (
-                    <AutomationCard 
-                      key={project.repoName} // Assuming project has a unique repoName property
-                      projectname={project.repoName} // Assuming project has a name property
-                      logo={getLogoByTemplateName(project.template)} // Get logo based on templateName
-                      giturl={project.repoUrl} // Assuming project has a repoUrl property
-                      percentage={7}
-                      visibility={project.visibility} 
-                      createdAt={project.createdAt}
-                      templateName={project.template}
-                    />
-                  ))
-                ) : null // No content if automationData is empty
-              ) : (
-                <Modal isOpen={isModalOpen} onClose={closeModal} />
-              )}
+            {automationData.length > 0 ? (
+              automationData.map((project) => (
+                <AutomationCard
+                  key={project.repoName}
+                  projectname={project.repoName}
+                  logo={getLogoByTemplateName(project.template)}
+                  giturl={project.repoUrl}
+                  percentage={7}
+                  visibility={project.visibility}
+                  createdAt={project.createdAt}
+                  templateName={project.template}
+                />
+              ))
+              ) : null}
             </div>
           </div>
         </div>
@@ -94,4 +102,3 @@ export default function ProfilePage() {
     </div>
   );
 }
-

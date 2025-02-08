@@ -1,3 +1,4 @@
+// src/app/automation/page.js
 "use client";
 
 import { useState, useEffect } from "react";
@@ -9,11 +10,12 @@ import NavBar from "@/components/dashboard/navbar";
 import MobileBar from "@/components/dashboard/mobilebar";
 import "@/styles/dashboard.css";
 import "@/styles/automation.css";
-import { FaSearch, FaCodeBranch, FaPlus } from "react-icons/fa";
-import CreateRepoModal from "@/components/automation/newrepo";
+import CreateRepoModal from "@/components/automation/newrepomodal";
 import Modal from "@/components/dashboard/signinModal";
 import { addData } from "@/lib/database";
 import { useRouter } from "next/navigation";
+import ImportRepo from "@/components/automation/importrepo";  // Import the ImportRepo component
+import NewRepoSection from "@/components/automation/newrepo"; // Import the NewRepoSection component
 
 const templates = [
   { name: "HTML_CSS_JS", image: "https://static.vecteezy.com/system/resources/previews/013/313/458/non_2x/html-icon-3d-rendering-illustration-vector.jpg" },
@@ -36,7 +38,13 @@ export default function AutomationPage() {
   const [selectedTemplate, setSelectedTemplate] = useState(null);
   const API_KEY = process.env.NEXT_PUBLIC_PROJECT_CUSTOM_API;
   const router = useRouter();
-console.log(session)
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    if (!session) {
+      setIsModalOpen(true);
+    }
+  }, [session]);
 
   useEffect(() => {
     if (AccessToken) {
@@ -55,16 +63,12 @@ console.log(session)
     repo.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const truncateDescription = (desc, maxLength = 100) => {
-    if (!desc) return '';
-    return desc.length > maxLength ? `${desc.substring(0, maxLength)}...` : desc;
-  };
-
   const toggleSidebarContent = () => {
     setIsSidebarContentVisible((prev) => !prev);
   };
 
   const handleTemplateClick = (template) => {
+    console.log("clcikec"+template.name)
     setSelectedTemplate(template);
     setIsCreateRepoModalOpen(true);
   };
@@ -83,11 +87,14 @@ console.log(session)
       await addData(API_KEY, "GitMax", "Automations", repoDocument);
 
       router.push(`${window.location.pathname}/${repo.name}`);
-
     } catch (error) {
       console.error("Error importing repo:", error);
     }
   };
+
+  if (!session) {
+    return <Modal isOpen={isModalOpen} onClose={router.back} />;
+  }
 
   return (
     <div>
@@ -101,58 +108,21 @@ console.log(session)
 
       <div className="dashboard-content">
         <div className="automation-container">
-          <div className="repos-container">
-            <div className="repo-header">
-              <h2 className="section-title">Import a Git Repository</h2>
-            </div>
-            <div className="search-container">
-              <FaSearch className="search-icon" />
-              <input
-                type="text"
-                placeholder="Search repositories..."
-                className="search-input"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
-            <div className="repo-list">
-              {filteredRepos.map((repo) => (
-                <div key={repo.id} className="repo-item">
-                  <div className="repo-content">
-                    <div className="repo-meta-top">
-                      <span className="repo-visibility">{repo.visibility}</span>
-                      <span className="repo-username">/{session.user.username}</span>
-                    </div>
-                    <h3 className="repo-name">{repo.name}</h3>
-                    <p className="repo-description">{truncateDescription(repo.description)}</p>
-                    <div className="repo-meta-bottom">
-                      <span className="repo-language">
-                        <FaCodeBranch /> {repo.language}
-                      </span>
-                      <span className="repo-updated">Updated {repo.updated_at}</span>
-                    </div>
-                  </div>
-                  <button className="import-repo-btn" onClick={() => handleImport(repo)}>
-                    <FaPlus /> Import
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
+          {/* Import Repo Section */}
+          <ImportRepo
+            filteredRepos={filteredRepos}
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            handleImport={handleImport}
+            session={session}
+            API_KEY={API_KEY}
+          />
 
-          <div className="templates-container">
-            <div className="repo-header">
-              <h2 className="section-title">Create a New Repository</h2>
-            </div>
-            <div className="templates-grid">
-              {templates.map((template) => (
-                <div key={template.name} className="template-card" onClick={() => handleTemplateClick(template)}>
-                  <img src={template.image} alt={template.name} className="template-image" />
-                  <h3 className="template-name">{template.name}</h3>
-                </div>
-              ))}
-            </div>
-          </div>
+          {/* New Repo Section */}
+          <NewRepoSection
+            templates={templates}
+            handleTemplateClick={handleTemplateClick}
+          />
         </div>
       </div>
 

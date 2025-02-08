@@ -138,6 +138,24 @@
   color: white;
 }
 
+.imported-repo-btn {
+  background: #333;
+  border: 1px solid white;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+}
+
+.imported-repo-btn:hover {
+  border: 2px solid #333;
+}
+
 /* Keep "Create New" title fixed */
 .section-title {
   font-size: 1.8rem;
