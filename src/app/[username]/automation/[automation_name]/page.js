@@ -117,7 +117,7 @@ const AutomationPage = () => {
         <div style={styles.logoSection}>
           <FaGithub size={32} />
           <div style={styles.usernameSection}>
-            Raahim2
+            {session.user.username}/{automation_name}
           </div>
         </div>
 
@@ -126,7 +126,7 @@ const AutomationPage = () => {
             style={styles.tab}
             onClick={() => setTab("code")}
           >
-            <FaCode /> Code
+            <FaCode/> Code
             {tab === "code" && <span style={styles.tabActive}></span>}
           </button>
           <button
@@ -164,7 +164,7 @@ const AutomationPage = () => {
       </nav>
 
       <main style={styles.mainContent}>
-        {tab === "code" && <CodeTab />}
+        {tab === "code" && <CodeTab session={session} reponame={automation_name}/>}
         {tab === "plan" && <PlanTab />}
         {tab === "notifications" && <NotificationTab />}
         {tab === "settings" && <SettingsTab />}
