@@ -15,11 +15,11 @@ const ImportRepo = ({ filteredRepos, searchQuery, setSearchQuery, handleImport, 
     };
 
     const data = await fetchData(API_KEY, "GitMax", "Automations", filterCondition);
-    
+
     if (data && data.length > 0) {
-      return true; // Repo already imported
+      return data[0]; // Return the automation data if already imported
     }
-    return false; // Repo not imported
+    return null; // Repo not imported
   };
 
   // Fetch imported repositories for the user
@@ -27,8 +27,8 @@ const ImportRepo = ({ filteredRepos, searchQuery, setSearchQuery, handleImport, 
     const fetchImportedRepos = async () => {
       const repoNames = await Promise.all(
         filteredRepos.map(async (repo) => {
-          const isImported = await checkIfRepoImported(repo.name);
-          return { name: repo.name, isImported };
+          const automationData = await checkIfRepoImported(repo.name);
+          return { name: repo.name, automationData };
         })
       );
       setImportedRepos(repoNames);
@@ -44,14 +44,9 @@ const ImportRepo = ({ filteredRepos, searchQuery, setSearchQuery, handleImport, 
     return desc.length > maxLength ? `${desc.substring(0, maxLength)}...` : desc;
   };
 
-  // Get the button class based on whether the repo is imported
-  const getButtonClass = (repoImported) => {
-    return repoImported ? "imported-repo-btn" : "import-repo-btn";
-  };
-
   // Handle the redirect after import
-  const handleRedirect = () => {
-    router.push('/hello'); // Redirect to /hello page
+  const handleRedirect = (automationName) => {
+    router.push(`automation/${automationName}`); // Redirect to /automation/{automation_name}
   };
 
   return (
@@ -71,7 +66,9 @@ const ImportRepo = ({ filteredRepos, searchQuery, setSearchQuery, handleImport, 
       </div>
       <div className="repo-list">
         {filteredRepos.map((repo) => {
-          const repoImported = importedRepos.find((importedRepo) => importedRepo.name === repo.name)?.isImported;
+          const importedRepo = importedRepos.find((importedRepo) => importedRepo.name === repo.name);
+          const isImported = importedRepo?.automationData !== null && importedRepo?.automationData !== undefined;
+          const automationName = importedRepo?.automationData?.automationName;
 
           return (
             <div key={repo.id} className="repo-item">
@@ -89,16 +86,25 @@ const ImportRepo = ({ filteredRepos, searchQuery, setSearchQuery, handleImport, 
                   <span className="repo-updated">Updated {repo.updated_at}</span>
                 </div>
               </div>
-              <button
-                className={getButtonClass(repoImported)} // Apply the conditional class
-                onClick={() => {
-                  handleImport(repo); // Handle repo import
-                  if (repoImported) handleRedirect(); // Redirect if already imported
-                }}
-                disabled={repoImported} // Disable import if already imported
-              >
-                {repoImported ? <FaCheck /> : <FaPlus />} {repoImported ? "Imported" : "Import"}
-              </button>
+              {!isImported ? (
+                <button
+                  className="import-repo-btn"
+                  onClick={() => {
+                    handleImport(repo); // Handle repo import
+                  }}
+                >
+                  <FaPlus /> Import
+                </button>
+              ) : (
+                <button
+                  className="imported-repo-btn"
+                  onClick={() => {
+                    handleRedirect(repo.name); // Redirect to automation page
+                  }}
+                >
+                  <FaCheck /> Imported
+                </button>
+              )}
             </div>
           );
         })}

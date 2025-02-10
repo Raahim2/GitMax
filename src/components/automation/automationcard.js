@@ -106,7 +106,7 @@ const getColor = (percentage) => {
     return '#10b981'; // Green
 };
 
-const AutomationCard = ({ projectname, logo, percentage, visibility, createdAt, templateName }) => {
+const AutomationCard = ({ projectname, logo, percentage, visibility, createdAt, templateName  , giturl}) => {
     const radius = 45; // Radius of the progress circle
     const circumference = 2 * Math.PI * radius; // Circumference of the circle
     const progress = (percentage * circumference) / 100; // Progress based on percentage
@@ -134,7 +134,7 @@ const AutomationCard = ({ projectname, logo, percentage, visibility, createdAt, 
                     <h4 style={styles.projectName} className="project-name">{projectname}</h4>
                 </div>
                 <a 
-                    href="https://github.com/Raahim2/GitMax" 
+                    href={giturl}
                     target="_blank" 
                     rel="noopener noreferrer"
                     style={styles.viewRepoButton}
