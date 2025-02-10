@@ -174,7 +174,7 @@ const CodeTab = ({ session, reponame }) => {
         </div>
       </div>
       <div style={{ flex: 1, fontFamily: 'monospace', whiteSpace: 'pre-wrap', overflowX: 'auto', minWidth: 0, backgroundColor: '#fff', color: '#000' }}>
-        <CodeBlock code={activeFileContent} filename={"Repo.py"} />
+        <CodeBlock code={activeFileContent} filename={"Repo.py"}  />
       </div>
     </div>
   );

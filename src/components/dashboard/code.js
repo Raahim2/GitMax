@@ -36,7 +36,7 @@ export default function CodeBlock({ code, filename, highlightLines = []}) {
   const [copied, setCopied] = useState(false);
   const [language, setLanguage] = useState("text"); // State for language
   const [loading, setLoading] = useState(false); // State to track loading status
-  const [isDarkMode , setIsDarkMode] = useState(true)
+  const [isDarkMode , setIsDarkMode] = useState(false)
 
   useEffect(() => {
     if (filename) {
