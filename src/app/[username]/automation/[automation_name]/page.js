@@ -64,10 +64,10 @@ const AutomationPage = () => {
       border: "none",
       fontSize: "14px",
       position: "relative",
-      textDecoration: "none", // Reset link styles
-      color: "#24292e", // Set default text color
+      textDecoration: "none", 
+      color: "#24292e", 
     },
-    tabActive: { // Style for the active tab's underline
+    tabActive: { 
       position: "absolute",
       bottom: 0,
       left: 0,

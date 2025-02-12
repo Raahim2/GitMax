@@ -53,4 +53,39 @@ async function addData(apiKey, dbName, collectionName, document) {
     }
 }
 
-export { fetchData, addData };
+async function updateData(apiKey, dbName, collectionName, filterCondition, updateData) {
+    const endpoint = `${BASE_URL}/update`;
+
+    const payload = {
+        API_KEY: apiKey,
+        db_name: dbName,
+        collection_name: collectionName,
+        filter_condition: filterCondition,
+        update_data: updateData
+    };
+
+    try {
+        const response = await fetch(endpoint, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        });
+
+        if (response.status === 200) {
+            const responseData = await response.json();
+            console.log("Data updated successfully!");
+            console.log("Response:", responseData);
+        } else {
+            console.error(`Failed to update data. Status code: ${response.status}`);
+            const errorText = await response.text();
+            console.error("Response:", errorText);
+        }
+    } catch (error) {
+        console.error("Error updating data:", error);
+    }
+}
+
+
+export { fetchData, addData , updateData};
