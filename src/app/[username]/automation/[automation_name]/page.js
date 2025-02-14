@@ -166,7 +166,7 @@ const AutomationPage = () => {
       <main style={styles.mainContent}>
         {tab === "code" && <CodeTab session={session} reponame={automation_name}/>}
         {tab === "plan" && <PlanTab />}
-        {tab === "notifications" && <NotificationTab />}
+        {tab === "notifications" && <NotificationTab session={session}/>}
         {tab === "settings" && <SettingsTab />}
       </main>
     </div>
