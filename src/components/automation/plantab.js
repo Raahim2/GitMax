@@ -163,7 +163,7 @@ const PlanTab = () => {
       return (
           <div style={styles.errorContainer}>
               <img
-                  src="https://miro.medium.com/v2/resize : fit : 1400/1*EvH3R4Se_tSyXoSNQEw6ow.gif"
+                  src="/error.gif"
                   alt="Error"
                   style={styles.errorImage}
               />

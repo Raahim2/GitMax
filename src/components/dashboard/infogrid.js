@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import InfoCard from "./infocard";
+import Link from "next/link";
 
 const InfoGrid = ({ username  , githubToken}) => {
   const [profileData, setProfileData] = useState(null);
@@ -60,14 +61,21 @@ const InfoGrid = ({ username  , githubToken}) => {
 
   return (
     <div className="w-layout-grid _2-grid">
+      <Link href={`/${username}/followers`}>
       <InfoCard
         caption="Followers"
         value={profileData.followers}
       />
+      </Link>
+      
+      <Link href={`/${username}/projects`}>
       <InfoCard
         caption="Repositories"
         value={repos.length}
       />
+      </Link>
+
+
       <InfoCard
         caption="Stars"
         value={totalStars}
