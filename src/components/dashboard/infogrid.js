@@ -34,7 +34,6 @@ const InfoGrid = ({ username  , githubToken}) => {
         let size = 0;
         let lines = 0;
 
-        // Loop through repositories and calculate stars, forks, size, and lines of code
         reposData.forEach((repo) => {
           stars += repo.stargazers_count;
           forks += repo.forks_count;
