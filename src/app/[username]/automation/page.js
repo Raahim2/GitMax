@@ -68,7 +68,6 @@ export default function AutomationPage() {
   };
 
   const handleTemplateClick = (template) => {
-    console.log("clcikec"+template.name)
     setSelectedTemplate(template);
     setIsCreateRepoModalOpen(true);
   };
