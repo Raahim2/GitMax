@@ -15,10 +15,10 @@ const PlanTab = () => {
             borderRadius: '12px',
             padding: '24px',
             boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)',
-            overflowX: 'auto',
+            overflowX: 'auto', /* Enable horizontal scrolling */
         },
         header: {
-            fontSize: '20px',
+            fontSize: '1.5rem',
             fontWeight: '600',
             marginBottom: '24px',
             color: '#1a1a1a',
@@ -26,7 +26,7 @@ const PlanTab = () => {
         table: {
             width: '100%',
             borderCollapse: 'collapse',
-            minWidth: '800px',
+            whiteSpace: 'nowrap', /* Prevent text from wrapping */
         },
         th: {
             background: '#f8f9fa',
@@ -35,19 +35,19 @@ const PlanTab = () => {
             borderBottom: '2px solid #e9ecef',
             fontWeight: '600',
             color: '#495057',
-            fontSize: '14px',
+            fontSize: '1rem',
         },
         td: {
             padding: '16px',
             borderBottom: '1px solid #e9ecef',
             color: '#212529',
-            fontSize: '14px',
+            fontSize: '1rem',
             verticalAlign: 'middle',
         },
         status: {
             borderRadius: '20px',
             padding: '6px 12px',
-            fontSize: '12px',
+            fontSize: '0.75rem',
             fontWeight: '600',
             color: '#fff',
             display: 'inline-block',
@@ -57,16 +57,17 @@ const PlanTab = () => {
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            height: '87vh', // Take full viewport height
+            height: '87vh',
             textAlign: 'center',
         },
         errorImage: {
-            maxWidth: '600px',
-            marginBottom: '24px', // Add some space between the image and text
+            maxWidth: '100%',
+            height: 'auto',
+            marginBottom: '24px',
         },
         errorMessage: {
-            fontSize: '24px',
-            color: '#495057', // Use a more neutral color
+            fontSize: '1.5rem',
+            color: '#495057',
             fontWeight: '500',
         },
         chevronButton: {
@@ -88,26 +89,26 @@ const PlanTab = () => {
         checkbox: {
             width: '18px',
             height: '18px',
-            accentColor: '#4dabf7',
+            accentColor: '#4dabf7'
         },
     };
 
     const getStatusStyle = (status) => {
         switch (status) {
-            case "In Progress": return { ...styles.status, backgroundColor:"#ffd700" };
-            case "Completed": return { ...styles.status, backgroundColor:"#40c057" };
-            case "To Do": return { ...styles.status, backgroundColor:"#4dabf7" };
-            default:return { ...styles.status, backgroundColor:"#adb5bd" };
-        }
+          case "In Progress": return { ...styles.status, backgroundColor:"#ffd700" };
+          case "Completed": return { ...styles.status, backgroundColor:"#40c057" };
+          case "To Do": return { ...styles.status, backgroundColor:"#4dabf7" };
+          default:return { ...styles.status, backgroundColor:"#adb5bd" };
+      }
     };
 
     const formatDate = (date) => {
-        const options = { weekday:'short', day:'numeric', month:'short' };
-        return date.toLocaleDateString('en-US', options);
+      const options = { weekday:'short', day:'numeric', month:'short' };
+      return date.toLocaleDateString('en-US', options);
     };
 
     useEffect(() => {
-        const fetchProjectPlan = async () => {
+      const fetchProjectPlan = async () => {
 
           try {
               const data = await fetchData(API_KEY, "GitMax", "Automations", { repoName : automation_name });

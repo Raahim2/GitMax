@@ -12,24 +12,36 @@ const CodeTab = ({ session }) => {
   const [repoDetails, setRepoDetails] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isMobile, setIsMobile] = useState(false);
 
   const API_KEY = process.env.NEXT_PUBLIC_PROJECT_CUSTOM_API;
 
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
-  // VS Code-like light theme styles
-  const styles = {
+  const getStyles = (isMobile) => ({
     container: {
       display: 'flex',
-      height: 'calc(100vh - 75px)',
+      flexDirection: isMobile ? 'column' : 'row',
+      height: isMobile ? '100vh' : 'calc(100vh - 75px)',
       backgroundColor: '#ffffff',
       borderRadius: '4px',
       overflow: 'hidden',
       boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
     },
     sidebar: {
-      width: '300px',
+      width: isMobile ? '100%' : '300px',
+      height: isMobile ? '40vh' : 'auto',
       backgroundColor: '#f3f3f3',
-      borderRight: '1px solid #e0e0e0',
+      borderRight: isMobile ? 'none' : '1px solid #e0e0e0',
+      borderBottom: isMobile ? '1px solid #e0e0e0' : 'none',
       overflowY: 'auto',
       padding: '16px'
     },
@@ -39,7 +51,7 @@ const CodeTab = ({ session }) => {
       margin: '0'
     },
     listItem: {
-      padding: '4px 0',
+      padding: isMobile ? '8px 0' : '4px 0',
       cursor: 'pointer',
       '&:hover': {
         backgroundColor: 'rgba(0,0,0,0.05)'
@@ -48,15 +60,17 @@ const CodeTab = ({ session }) => {
     folderHeader: {
       display: 'flex',
       alignItems: 'center',
-      gap: '6px',
+      gap: isMobile ? '8px' : '6px',
       fontWeight: '600',
-      color: '#1f1f1f'
+      color: '#1f1f1f',
+      fontSize: isMobile ? '16px' : '14px'
     },
     fileHeader: {
       display: 'flex',
       alignItems: 'center',
-      gap: '6px',
-      color: '#1f1f1f'
+      gap: isMobile ? '8px' : '6px',
+      color: '#1f1f1f',
+      fontSize: isMobile ? '16px' : '14px'
     },
     icon: {
       color: '#80a0b0',
@@ -66,12 +80,17 @@ const CodeTab = ({ session }) => {
       flex: 1,
       overflow: 'auto',
       backgroundColor: '#fffffe',
+      height: isMobile ? '60vh' : 'auto'
     },
     error: {
       color: '#dc3545',
       padding: '16px'
+    },
+    explorerTitle: {
+      margin: isMobile ? '0 0 12px 4px' : '0 0 16px 8px',
+      fontSize: isMobile ? '18px' : '16px'
     }
-  };
+  });
 
   useEffect(() => {
     const fetchRepoData = async () => {
@@ -183,47 +202,63 @@ const CodeTab = ({ session }) => {
     }
 };
 
-
-  const renderTree = (items, level = 0) => (
-    <ul style={{ ...styles.fileTree, paddingLeft: level > 0 ? '16px' : '0' }}>
-      {items.map((item) => (
-        <li key={item.path} style={styles.listItem}>
-          {item.type === 'folder' ? (
-            <>
-              <div 
-                style={{ ...styles.folderHeader, paddingLeft: `${level * 8}px` }}
-                onClick={() => toggleFolder(item.path)}
-              >
-                {expandedFolders[item.path] ? (
-                  <>
-                    <FaFolderOpen style={styles.icon} />
-                    <FaChevronUp size={12} />
-                  </>
-                ) : (
-                  <>
-                    <FaFolder style={styles.icon} />
-                    <FaChevronDown size={12} />
-                  </>
+  const renderTree = (items, level = 0) => {
+    const styles = getStyles(isMobile);
+    return (
+      <ul style={{ ...styles.fileTree, paddingLeft: level > 0 ? '16px' : '0' }}>
+        {items.map((item) => (
+          <li key={item.path} style={styles.listItem}>
+            {item.type === 'folder' ? (
+              <>
+                <div 
+                  style={{ 
+                    ...styles.folderHeader, 
+                    paddingLeft: `${level * (isMobile ? 6 : 8)}px`,
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis'
+                  }}
+                  onClick={() => toggleFolder(item.path)}
+                >
+                  {expandedFolders[item.path] ? (
+                    <>
+                      <FaFolderOpen size={isMobile ? 18 : 14} style={styles.icon} />
+                      <FaChevronUp size={isMobile ? 16 : 12} />
+                    </>
+                  ) : (
+                    <>
+                      <FaFolder size={isMobile ? 18 : 14} style={styles.icon} />
+                      <FaChevronDown size={isMobile ? 16 : 12} />
+                    </>
+                  )}
+                  <span>{item.name}</span>
+                </div>
+                {expandedFolders[item.path] && item.children && (
+                  renderTree(item.children, level + 1)
                 )}
+              </>
+            ) : (
+              <div 
+                style={{ 
+                  ...styles.fileHeader, 
+                  paddingLeft: `${level * (isMobile ? 6 : 8) + (isMobile ? 20 : 24)}px`,
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis'
+                }}
+                onClick={() => handleFileClick(item.download_url)}
+              >
+                <FaFile size={isMobile ? 16 : 14} style={styles.icon} />
                 <span>{item.name}</span>
               </div>
-              {expandedFolders[item.path] && item.children && (
-                renderTree(item.children, level + 1)
-              )}
-            </>
-          ) : (
-            <div 
-              style={{ ...styles.fileHeader, paddingLeft: `${level * 8 + 24}px` }}
-              onClick={() => handleFileClick(item.download_url)}
-            >
-              <FaFile style={styles.icon} />
-              <span>{item.name}</span>
-            </div>
-          )}
-        </li>
-      ))}
-    </ul>
-  );
+            )}
+          </li>
+        ))}
+      </ul>
+    );
+  };
+
+  const styles = getStyles(isMobile);
 
   if (loading) return <div style={styles.error}>Loading repository...</div>;
   if (error) return <div style={styles.error}>Error: {error}</div>;
@@ -231,15 +266,17 @@ const CodeTab = ({ session }) => {
   return (
     <div style={styles.container}>
       <div style={styles.sidebar}>
-        <h3 style={{ margin: '0 0 16px 8px' }}>Explorer</h3>
+        <h3 style={styles.explorerTitle}>Explorer</h3>
         {renderTree(folderStructure)}
       </div>
       
       <div style={styles.codeContainer}>
         {activeFileContent ? (
-          <CodeBlock code={activeFileContent} filename={"GitMax.py"}/>
+          <CodeBlock code={activeFileContent} filename={"GitMax.py"} />
         ) : (
-          <div>Select a file to view its content</div>
+          <div style={{ padding: '16px', color: '#666' }}>
+            Select a file to view its content
+          </div>
         )}
       </div>
     </div>
