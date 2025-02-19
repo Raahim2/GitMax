@@ -18,7 +18,6 @@ const CreateRepoModal = ({ isOpen, onClose, template }) => {
   const router = useRouter()
   const API_KEY = process.env.NEXT_PUBLIC_PROJECT_CUSTOM_API;
 
-  console.log(template)
 
 
   useEffect(() => {
@@ -78,7 +77,12 @@ const CreateRepoModal = ({ isOpen, onClose, template }) => {
         } else if (template.name === "Flask") {
             templateFolderPath = 'templates/FLASK';
         }  else if (template.name === "Next") {
-          console.log("making next app")
+            templateFolderPath = 'templates/NEXT';
+        }else if (template.name === "ReactNative Expo") {
+            templateFolderPath = 'templates/EXPO';
+        } else if (template.name === "React Js") {
+            templateFolderPath = 'templates/NEXT';
+        }  else if (template.name === "Django") {
             templateFolderPath = 'templates/NEXT';
         } else {
             throw new Error("Unknown template name");
