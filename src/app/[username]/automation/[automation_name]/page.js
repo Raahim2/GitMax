@@ -158,11 +158,11 @@ const AutomationPage = () => {
         .main-content {
           flex: 1;
           width: 100%;
-          max-width: 1200px;
+          maxWidth: 1200px;
           margin: 0 auto;
         }
 
-        @media (max-width: 768px) {
+        @media (maxWidth: 768px) {
           .navbar {
             flex-direction: column;
             gap: 12px;
