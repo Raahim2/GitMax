@@ -61,7 +61,7 @@ const PlanTab = () => {
             textAlign: 'center',
         },
         errorImage: {
-            maxWidth: '100%',
+            maxWidth: '80%',
             height: 'auto',
             marginBottom: '24px',
         },

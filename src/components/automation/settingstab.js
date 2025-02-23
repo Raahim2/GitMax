@@ -10,8 +10,6 @@ import chatbot from '@/lib/gemini-1.5';
 const SettingsTab = () => {
   const { automation_name } = useParams();
   const [taskDescription, setTaskDescription] = useState('');
-  const [programmingLanguage, setProgrammingLanguage] = useState(null);
-  const [frameworksLibraries, setFrameworksLibraries] = useState([]);
   const [automationDuration, setAutomationDuration] = useState(5);
   const [repoUrl, setRepoUrl] = useState('');
   const [isAutomated, setIsAutomated] = useState(false);
@@ -137,8 +135,6 @@ const SettingsTab = () => {
             const firstItem = data[0];
             setRepoUrl(firstItem.repoUrl);
             setTaskDescription(firstItem.taskDescription || '');
-            setProgrammingLanguage(languageOptions.find(option => option.value === firstItem.programmingLanguage) || null);
-            setFrameworksLibraries(firstItem.frameworksLibraries ? firstItem.frameworksLibraries.map(lib => ({ label: lib, value: lib })) : []);
             setAutomationDuration(firstItem.automationDuration || 5);
 
             // Check if automationDuration is undefined
@@ -166,19 +162,69 @@ const SettingsTab = () => {
   }, [API_KEY, languageOptions, automation_name]);
 
   const generatePlan = async () => {
+    console.log("Generating..")
     try {
-      // const prompt = `Given the task: '${taskDescription}' and template: '${template}', generate a step-by-step project plan. Focus on the actual implementation phases (no initialization or deployment tasks). Provide a daily breakdown, with one task per day. Each task should include the title and a brief description of the approach. The output should be an array with daily tasks, e.g., ['Day 1: Task title - Brief approach', 'Day 2: Task title - Brief approach', ...]. The tasks should be logical, feasible, and progressive for building the project. The duration of the tasks should be appropriate to complete in one day give a array of length ${automationDuration}. In array`;
-      const prompt = `Given the task: '${taskDescription}' and template: '${template}', generate a step-by-step project plan. Focus on the implementation phases only, excluding initialization and deployment. Provide ${automationDuration} tasks, each with a title and brief description in this format: 'Task title - Brief approach'. Ensure all tasks are logical, feasible, and progressively build the project , Only output in a generalized format that is ['Task title here - Brief approach', 'Task title here - Brief approach', ...] nothing else!`
-      const response = await chatbot(prompt);
-      console.log(response)
-      const formattedArray = JSON.parse(response.replace(/'/g, '"'));
-      console.log(formattedArray)
+      const prompt = `
+        Generate a JSON response with the following structure and format. Include day-wise tasks, file operations (create, modify, delete), and specific coding instructions. Use the provided project description, template, and duration to create a consistent and complete JSON.
 
-      return formattedArray;
+        Project Details:
+
+        ProjectDesc: ${taskDescription}
+        Template: ${template}
+        Duration: ${automationDuration}
+        JSON Structure:
+
+        {
+          "Project Overview": {
+            "Project Name": "[Project Title]",
+            "Project Description": "[Detailed description based on user prompt]",
+            "Template": "[Selected Template]",
+            "Duration": "[Total Days]"
+          },
+          "Default File Structure": {
+            "root": [
+              "index.html",
+              "style.css",
+              "app.js"
+            ]
+          },
+          "Daily Breakdown": [
+            {
+              "Day": 1,
+              "Task Title": "[Task Title]",
+              "Files to Create": ["[List files]"],
+              "Files to Modify": ["[List files]"],
+              "Files to Delete": ["[List files, if any]"],
+              "Task Details": "[Detailed explanation of what to implement today]",
+            }
+            // Repeat for each day up to the total duration
+          ]
+        }
+        Instructions for YOU:
+
+        Use the provided project description, template, and duration to define tasks.
+        Auto-generate the default file structure based on the template.
+        For each day:
+        Assign a logical and incremental coding task.
+        Clearly state file operations (create/modify/delete).
+        Ensure tasks build on previous work to complete the project by the final day.
+        Only output the JSON response. No explanations, no extra text [VERY IMPORTANT].
+        Focus solely on coding tasks—exclude documentation and deployment.
+      `
+
+      const response = await chatbot(prompt);
+
+      let lines = response.trim().split('\n');
+      let modifiedText = lines.slice(1, -1).join('\n');
+
+      let obj = JSON.parse(modifiedText);
+      console.log(obj)
+
+      return obj;
 
     } catch (error) {
       console.error("Error generating or parsing plan:", error);
-      throw error; // Re-throw to be caught by handleSubmit
+      throw error; 
     }
   };
 
@@ -192,8 +238,6 @@ const SettingsTab = () => {
 
     const settings = {
       taskDescription,
-      programmingLanguage: programmingLanguage ? programmingLanguage.value : null,
-      frameworksLibraries: frameworksLibraries.map(option => option.value),
       automationDuration,
     };
 
@@ -260,30 +304,6 @@ const SettingsTab = () => {
             />
           </div>
 
-          <div style={styles.formGroup}>
-            <label style={styles.label}>Programming Language</label>
-            <div style={styles.select}>
-              <Select
-                options={languageOptions}
-                value={programmingLanguage}
-                onChange={(selectedOption) => setProgrammingLanguage(selectedOption)}
-                placeholder="Select a language"
-              />
-            </div>
-          </div>
-
-          <div style={styles.formGroup}>
-            <label style={styles.label}>Frameworks/Libraries</label>
-            <div style={styles.select}>
-              <CreatableSelect
-                isMulti
-                options={[]}
-                value={frameworksLibraries}
-                onChange={(selectedOptions) => setFrameworksLibraries(selectedOptions || [])}
-                placeholder="Enter frameworks/libraries (e.g., React, TensorFlow)"
-              />
-            </div>
-          </div>
 
           <div style={styles.formGroup}>
             <label style={styles.label}>Automation Duration (Days)</label>

@@ -49,14 +49,7 @@ const AutomationPage = () => {
           ))}
         </div>
 
-        {/* <div className="right-section">
-          <button className="icon-button">
-            <FaBell size={20} />
-          </button>
-          <button className="icon-button">
-            <FaCog size={20} />
-          </button>
-        </div> */}
+        
       </nav>
 
       <main className="main-content">
