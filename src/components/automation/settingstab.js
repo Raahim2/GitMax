@@ -18,20 +18,7 @@ const SettingsTab = () => {
   const isInitialMount = useRef(true);
   const [showAlert, setShowAlert] = useState({ show: false, message: '', type: 'success' });
 
-  const languageOptions = [
-    { value: 'javascript', label: 'JavaScript' },
-    { value: 'python', label: 'Python' },
-    { value: 'java', label: 'Java' },
-    { value: 'csharp', label: 'C#' },
-    { value: 'php', label: 'PHP' },
-    { value: 'typescript', label: 'TypeScript' },
-    { value: 'ruby', label: 'Ruby' },
-    { value: 'go', label: 'Go' },
-    { value: 'kotlin', label: 'Kotlin' },
-    { value: 'swift', label: 'Swift' },
-    { value: 'c', label: 'C' },
-    { value: 'c++', label: 'C++'}
-];
+ 
 
 
   const styles = {
@@ -134,6 +121,7 @@ const SettingsTab = () => {
           if (data && data.length > 0) {
             const firstItem = data[0];
             setRepoUrl(firstItem.repoUrl);
+            settemplate(firstItem.template)
             setTaskDescription(firstItem.taskDescription || '');
             setAutomationDuration(firstItem.automationDuration || 5);
 
@@ -159,21 +147,70 @@ const SettingsTab = () => {
 
       fetchAutomationData();
     }
-  }, [API_KEY, languageOptions, automation_name]);
+  }, [API_KEY, automation_name]);
 
   const generatePlan = async () => {
-    console.log("Generating..")
     try {
+      let fileStructure = "";
+  
+      // Define file structure based on template
+      console.log(template)
+      if (template === "HTML_CSS_JS") {
+        fileStructure = `
+        ├── CSS/
+        │   └── style.css
+        ├── JS/
+        │   └── script.js
+        ├── index.html
+        └── README.md
+        `;
+      } else if (template === "Flask") {
+        fileStructure = `
+        ├── static/
+        │   ├── css/
+        │   │   └── style.css
+        │   └── images/
+        │       └── logo.png
+        ├── templates/
+        │   └── index.html
+        └── main.py
+        `;
+      } else if (template === "NEXT") {
+        fileStructure = `
+        ├── pages/
+        │   ├── index.js
+        │   └── _app.js
+        ├── public/
+        │   └── favicon.ico
+        ├── styles/
+        │   └── globals.css
+        ├── package.json
+        └── next.config.js
+        `;
+      } else if (template === "EXPO") {
+        fileStructure = `
+        ├── App.js
+        ├── assets/
+        ├── node_modules/
+        ├── package.json
+        └── app.json
+        `;
+      } else {
+        fileStructure = `
+        └── README.md
+        `;
+      }
+  
       const prompt = `
         Generate a JSON response with the following structure and format. Include day-wise tasks, file operations (create, modify, delete), and specific coding instructions. Use the provided project description, template, and duration to create a consistent and complete JSON.
-
+  
         Project Details:
-
+  
         ProjectDesc: ${taskDescription}
         Template: ${template}
         Duration: ${automationDuration}
         JSON Structure:
-
+  
         {
           "Project Overview": {
             "Project Name": "[Project Title]",
@@ -181,13 +218,7 @@ const SettingsTab = () => {
             "Template": "[Selected Template]",
             "Duration": "[Total Days]"
           },
-          "Default File Structure": {
-            "root": [
-              "index.html",
-              "style.css",
-              "app.js"
-            ]
-          },
+          "Default File Structure": "${fileStructure}",
           "Daily Breakdown": [
             {
               "Day": 1,
@@ -195,13 +226,13 @@ const SettingsTab = () => {
               "Files to Create": ["[List files]"],
               "Files to Modify": ["[List files]"],
               "Files to Delete": ["[List files, if any]"],
-              "Task Details": "[Detailed explanation of what to implement today]",
+              "Task Details": "[Detailed explanation of what to implement today]"
             }
             // Repeat for each day up to the total duration
           ]
         }
         Instructions for YOU:
-
+  
         Use the provided project description, template, and duration to define tasks.
         Auto-generate the default file structure based on the template.
         For each day:
@@ -210,23 +241,23 @@ const SettingsTab = () => {
         Ensure tasks build on previous work to complete the project by the final day.
         Only output the JSON response. No explanations, no extra text [VERY IMPORTANT].
         Focus solely on coding tasks—exclude documentation and deployment.
-      `
-
+      `;
+      
       const response = await chatbot(prompt);
-
+  
       let lines = response.trim().split('\n');
       let modifiedText = lines.slice(1, -1).join('\n');
-
+  
       let obj = JSON.parse(modifiedText);
-      console.log(obj)
-
+      console.log(response)
+  
       return obj;
-
     } catch (error) {
       console.error("Error generating or parsing plan:", error);
-      throw error; 
+      throw error;
     }
   };
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -243,11 +274,17 @@ const SettingsTab = () => {
 
     let plan = null;
 
-    if (!isAutomated) { // Only generate the plan when starting automation
+    if (!isAutomated) { 
+      const formattedDate = new Date().toLocaleDateString('en-US', {
+        weekday: 'short',
+        month: 'short',
+        day: 'numeric'
+      });
+
       try {
         plan = await generatePlan();
         settings.projectPlan = plan; // Add the generated plan to the settings
-        settings.createdAt = new Date().toISOString(); // Add the current date
+        settings.createdAt = formattedDate
       } catch (error) {
         console.error("Failed to generate project plan:", error);
         setShowAlert({
@@ -323,6 +360,10 @@ const SettingsTab = () => {
         <button style={styles.button} type="submit">
           {buttonText}
         </button>
+
+        {/* <button  style={styles.button} onClick={generatePlan}>
+          Generate Plan BETA
+        </button> */}
 
        
       </form>

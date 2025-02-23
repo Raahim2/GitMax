@@ -72,6 +72,12 @@ export default function AutomationPage() {
     setIsCreateRepoModalOpen(true);
   };
 
+  const formattedDate = new Date().toLocaleDateString('en-US', {
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric'
+  });
+
   const handleImport = async (repo) => {
     try {
       const repoDocument = {
@@ -80,7 +86,7 @@ export default function AutomationPage() {
         repoUrl: repo.html_url,
         visibility: repo.private ? "private" : "public",
         template: "BLANK",
-        createdAt: new Date().toISOString(),
+        createdAt: formattedDate
       };
 
       await addData(API_KEY, "GitMax", "Automations", repoDocument);

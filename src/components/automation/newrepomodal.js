@@ -166,6 +166,12 @@ const CreateRepoModal = ({ isOpen, onClose, template }) => {
         const contents = await fetchFolderContents(templateFolderPath);
         await processContents(contents);
 
+        const formattedDate = new Date().toLocaleDateString('en-US', {
+          weekday: 'short',
+          month: 'short',
+          day: 'numeric'
+        });
+
         // Store the repository information in the database
         const repoDocument = {
             githubUsername: session.user.username,
@@ -173,7 +179,7 @@ const CreateRepoModal = ({ isOpen, onClose, template }) => {
             repoUrl: repoData.html_url,
             visibility: repoData.private ? "private" : "public",
             template: template.name,
-            createdAt: new Date().toISOString(),
+            createdAt: formattedDate
         };
         await addData(API_KEY, "GitMax", "Automations", repoDocument);
 
