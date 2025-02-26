@@ -1,0 +1,23 @@
+name: Daily Repo Requests
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Runs every day at midnight UTC
+  workflow_dispatch: # Allows manual trigger
+
+jobs:
+  send_requests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch Repo URLs and Send Requests
+        env:
+          LIST_URL: "https://projects-api-three.vercel.app/Automation/list"
+          ENDPOINT_URL: "https://projects-api-three.vercel.app/Automation/automate"
+          API_KEY: "${{ secrets.API_KEY }}"
+        run: |
+          REPO_URLS=$(curl -s -X POST "$LIST_URL" -H "Content-Type: application/json" \
+            -d "{\"APIKEY\": \"$API_KEY\"}" | jq -r '.[]')
+          for REPO in $REPO_URLS; do
+            curl -X POST "$ENDPOINT_URL" -H "Content-Type: application/json" \
+              -d "{\"REPOURL\": \"$REPO\", \"APIKEY\": \"$API_KEY\"}"
+          done

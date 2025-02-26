@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
-import Select from 'react-select';
-import CreatableSelect from 'react-select/creatable';
+// import Select from 'react-select';
+// import CreatableSelect from 'react-select/creatable';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import { useParams } from 'next/navigation';
 import { updateData, fetchData } from '@/lib/database';
 import chatbot from '@/lib/gemini-1.5';
 
-const SettingsTab = () => {
+const SettingsTab = ({session}) => {
   const { automation_name } = useParams();
   const [taskDescription, setTaskDescription] = useState('');
   const [automationDuration, setAutomationDuration] = useState(5);
@@ -17,8 +17,9 @@ const SettingsTab = () => {
   const [template , settemplate] = useState("Blank");
   const isInitialMount = useRef(true);
   const [showAlert, setShowAlert] = useState({ show: false, message: '', type: 'success' });
+  const accessToken = session.accessToken
 
- 
+
 
 
   const styles = {
@@ -157,47 +158,46 @@ const SettingsTab = () => {
       console.log(template)
       if (template === "HTML_CSS_JS") {
         fileStructure = `
-        ├── CSS/
-        │   └── style.css
-        ├── JS/
-        │   └── script.js
-        ├── index.html
-        └── README.md
+        CSS/
+          style.css
+        JS/
+          script.js
+        index.html
+        README.md
         `;
       } else if (template === "Flask") {
         fileStructure = `
-        ├── static/
-        │   ├── css/
-        │   │   └── style.css
-        │   └── images/
-        │       └── logo.png
-        ├── templates/
-        │   └── index.html
-        └── main.py
+        static/
+          css/
+            style.css
+          images/
+            logo.png
+        templates/
+          index.html
+        main.py
         `;
       } else if (template === "NEXT") {
         fileStructure = `
-        ├── pages/
-        │   ├── index.js
-        │   └── _app.js
-        ├── public/
-        │   └── favicon.ico
-        ├── styles/
-        │   └── globals.css
-        ├── package.json
-        └── next.config.js
+        pages/
+          index.js
+          _app.js
+        public/
+          favicon.ico
+        styles/
+          globals.css
+        package.json
+        next.config.js
         `;
       } else if (template === "EXPO") {
         fileStructure = `
-        ├── App.js
-        ├── assets/
-        ├── node_modules/
-        ├── package.json
-        └── app.json
+      App.js  
+      assets/  
+      package.json  
+      app.json  
         `;
       } else {
         fileStructure = `
-        └── README.md
+        README.md
         `;
       }
   
@@ -313,6 +313,9 @@ const SettingsTab = () => {
     }
   };
 
+
+  
+
   return (
     <div style={styles.container}>
       <h2>AI Code Generation Task</h2>
@@ -361,10 +364,7 @@ const SettingsTab = () => {
           {buttonText}
         </button>
 
-        {/* <button  style={styles.button} onClick={generatePlan}>
-          Generate Plan BETA
-        </button> */}
-
+        
        
       </form>
     </div>
