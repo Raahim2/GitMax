@@ -7,7 +7,7 @@ import { useParams } from 'next/navigation';
 import { updateData, fetchData } from '@/lib/database';
 import chatbot from '@/lib/gemini-1.5';
 
-const SettingsTab = ({session}) => {
+const SettingsTab = () => {
   const { automation_name } = useParams();
   const [taskDescription, setTaskDescription] = useState('');
   const [automationDuration, setAutomationDuration] = useState(5);
@@ -17,7 +17,6 @@ const SettingsTab = ({session}) => {
   const [template , settemplate] = useState("Blank");
   const isInitialMount = useRef(true);
   const [showAlert, setShowAlert] = useState({ show: false, message: '', type: 'success' });
-  const accessToken = session.accessToken
 
 
 
