@@ -2,7 +2,7 @@ name: Daily Repo Requests
 
 on:
   schedule:
-    - cron: '0 0 * * *' # Runs every day at midnight UTC
+    - cron: '* * * * *' # Runs every day at midnight UTC
   workflow_dispatch: # Allows manual trigger
 
 jobs:
