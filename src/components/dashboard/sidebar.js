@@ -41,14 +41,14 @@ export default function Sidebar({ highlight, username, className }) {
       </div>
 
       <form onSubmit={handleSearchSubmit} style={{ marginBottom: '20px', display: 'flex', alignItems: 'center' }}>
-      <div style={{ position: 'relative', marginBottom: '20px' }}>
+      <div style={{ position: 'relative', marginBottom: '20px'  , margin:'auto' , width:'90%'}}>
   <input 
     type="text"
     value={searchTerm}
     onChange={(e) => setSearchTerm(e.target.value)}
     placeholder="Search username..."
     style={{
-      width: '100%',
+      width:'100%',
       padding: '10px',
       paddingLeft: '35px', // Add padding for the icon
       borderRadius: '4px',
