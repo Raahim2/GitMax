@@ -139,7 +139,7 @@ const LineChart = ({ username , githubToken}) => {
   };
 
   return (
-    <div className="table-module">
+    <div className="table-module" style={{backgroundColor:'white'  ,border: "1px solid #ddd"}}>
       <div className="table-header-smaller-padding">
         <h4 className="no-space-bottom">Monthly Commits Throughout the Year</h4>
       </div>
