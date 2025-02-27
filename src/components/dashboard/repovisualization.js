@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Chart, Pie, Line, Bar } from "react-chartjs-2";
+import { Chart, Pie, Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   ArcElement,
@@ -9,7 +9,6 @@ import {
   Legend,
   CategoryScale,
   LinearScale,
-  BarElement,
   LineElement,
   PointElement,
 } from "chart.js";
@@ -20,7 +19,6 @@ ChartJS.register(
   Legend,
   CategoryScale,
   LinearScale,
-  BarElement,
   LineElement,
   PointElement
 );
@@ -29,7 +27,6 @@ const RepoVisualization = ({ username, repoName , githubToken }) => {
 
   const [languageData, setLanguageData] = useState({});
   const [commitData, setCommitData] = useState([]);
-  const [starData, setStarData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -55,13 +52,6 @@ const RepoVisualization = ({ username, repoName , githubToken }) => {
 
         // Ensure commit data is an array
         setCommitData(Array.isArray(commits) ? commits : []);
-
-        // Fetch star growth (stub for demo purposes)
-        const stars = Array.from({ length: 12 }, (_, i) => ({
-          month: `Month ${i + 1}`,
-          stars: Math.floor(Math.random() * 100),
-        }));
-        setStarData(stars);
       } catch (error) {
         console.error("Error fetching GitHub data:", error);
       }
@@ -97,19 +87,8 @@ const RepoVisualization = ({ username, repoName , githubToken }) => {
     ],
   };
 
-  const starChartData = {
-    labels: starData.map((item) => item.month),
-    datasets: [
-      {
-        label: "Stars",
-        data: starData.map((item) => item.stars),
-        backgroundColor: "#FF6384",
-      },
-    ],
-  };
-
   return (
-    <div className="w-layout-grid _3-grid">
+    <div className="w-layout-grid _2-grid">
       {/* Programming Language Distribution */}
       <div className="module">
         <h4>Programming Language Distribution</h4>
@@ -124,12 +103,6 @@ const RepoVisualization = ({ username, repoName , githubToken }) => {
         ) : (
           <p>No commit activity available.</p>
         )}
-      </div>
-
-      {/* Star Growth */}
-      <div className="module">
-        <h4>Star Growth</h4>
-        <Bar data={starChartData} />
       </div>
     </div>
   );
