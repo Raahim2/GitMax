@@ -40,4 +40,4 @@ jobs:
           # Commit API request
           echo "Sending commit request..."
           curl -s -X POST "$COMMIT_URL" -H "Content-Type: application/json" \
-            -d "{\"APIKEY\": \"$API_KEY\", \"REPOURL\": \"https://github.com/Raahim2/Django-TextUtils\"}"
+            -d "{\"APIKEY\": \"$API_KEY\", \"REPOURL\": \"https://github.com/Raahim2/WebDev.github.io\"}"
