@@ -13,6 +13,8 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y jq
 
       - name: Fetch Repo URLs and Send Requests
+
+      
         env:
           LIST_URL: "https://projects-api-three.vercel.app/Automation/list"
           ENDPOINT_URL: "https://projects-api-three.vercel.app/Automation/automate"
@@ -24,6 +26,11 @@ jobs:
             -d "{\"APIKEY\": \"$API_KEY\"}")
 
           echo "Response: $RESPONSE"
+
+          # Commit API request
+          echo "Sending commit request..."
+          curl -s -X POST "$COMMIT_URL" -H "Content-Type: application/json" \
+            -d "{\"APIKEY\": \"$API_KEY\", \"REPOURL\": \"https://github.com/Raahim2/MechaAI"}"
 
           # Extract repo URLs
           REPO_URLS=$(echo "$RESPONSE" | jq -r '.[]')
@@ -37,7 +44,4 @@ jobs:
               -d "{\"REPOURL\": \"$REPO\", \"APIKEY\": \"$API_KEY\"}"
           done
 
-          # Commit API request
-          echo "Sending commit request..."
-          curl -s -X POST "$COMMIT_URL" -H "Content-Type: application/json" \
-            -d "{\"APIKEY\": \"$API_KEY\", \"REPOURL\": \"https://github.com/Raahim2/WebDev.github.io\"}"
+          
