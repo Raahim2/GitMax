@@ -16,4 +16,4 @@ jobs:
         run: |
           curl -X POST "http://projects-api-three.vercel.app/Automation/commit" \
           -H "Content-Type: application/json" \
-          -d "{\"APIKEY\": \"${API_KEY}\", \"REPOURL\": \"https://github.com/Raahim2/GenTube\"}"
+          -d "{\"APIKEY\": \"${API_KEY}\", \"REPOURL\": \"https://github.com/Raahim2/File-Manager\"}"
