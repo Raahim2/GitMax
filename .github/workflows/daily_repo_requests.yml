@@ -1,47 +1,19 @@
-name: Daily Repo Requests
+name: Daily POST Request
 
 on:
   schedule:
-    - cron: '0 0 * * *' # Runs every 5 minutes (for testing)
-  workflow_dispatch: # Allows manual trigger
+    - cron: '0 0 * * *'  # Runs every day at midnight UTC
+  workflow_dispatch:
 
 jobs:
-  send_requests:
+  post_request:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Install jq
-        run: sudo apt-get update && sudo apt-get install -y jq
-
-      - name: Fetch Repo URLs and Send Requests
-
-      
+      - name: Send POST request
         env:
-          LIST_URL: "https://projects-api-three.vercel.app/Automation/list"
-          ENDPOINT_URL: "https://projects-api-three.vercel.app/Automation/automate"
-          COMMIT_URL: "https://projects-api-three.vercel.app/Automation/commit"
-          API_KEY: "${{ secrets.API_KEY }}"
+          API_KEY: ${{ secrets.API_KEY }}
         run: |
-          echo "Fetching repo URLs..."
-          RESPONSE=$(curl -s -X POST "$LIST_URL" -H "Content-Type: application/json" \
-            -d "{\"APIKEY\": \"$API_KEY\"}")
-
-          echo "Response: $RESPONSE"
-
-          # Commit API request
-          echo "Sending commit request..."
-          curl -s -X POST "$COMMIT_URL" -H "Content-Type: application/json" \
-            -d "{\"APIKEY\": \"$API_KEY\", \"REPOURL\": \"https://github.com/Raahim2/MechaAI"}"
-
-          # Extract repo URLs
-          REPO_URLS=$(echo "$RESPONSE" | jq -r '.[]')
-
-          echo "Fetched repos: $REPO_URLS"
-
-          # Loop through repos and send automate requests
-          for REPO in $REPO_URLS; do
-            echo "Sending automate request for $REPO"
-            curl -s -X POST "$ENDPOINT_URL" -H "Content-Type: application/json" \
-              -d "{\"REPOURL\": \"$REPO\", \"APIKEY\": \"$API_KEY\"}"
-          done
-
-          
+          curl -X POST "http://projects-api-three.vercel.app/Automation/commit" \
+          -H "Content-Type: application/json" \
+          -d "{\"APIKEY\": \"${API_KEY}\", \"REPOURL\": \"https://github.com/Raahim2/StatsTube\"}"
