@@ -2,7 +2,7 @@ name: Daily Repo Requests
 
 on:
   schedule:
-    - cron: '0 0 * * *' # Runs every 5 minutes (for testing)
+    - cron: '*/5 * * * *' 
   workflow_dispatch: # Allows manual trigger
 
 jobs:
