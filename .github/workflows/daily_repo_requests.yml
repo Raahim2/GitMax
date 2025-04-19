@@ -2,7 +2,7 @@ name: Daily POST Request
 
 on:
   schedule:
-    - cron: '*/5 * * * *'  # Runs every day at midnight UTC
+    - cron: '*/5 * * * *'  # Runs every 5 minutes
   workflow_dispatch:
 
 jobs:
@@ -10,10 +10,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Send POST request
+      - name: Send POST request and print response
         env:
           API_KEY: ${{ secrets.API_KEY }}
         run: |
-          curl -X POST "http://projects-api-three.vercel.app/Automation/commit" \
-          -H "Content-Type: application/json" \
-          -d "{\"APIKEY\": \"${API_KEY}\", \"REPOURL\": \"https://github.com/Raahim2/File-Manager\"}"
+          echo "✅ Starting the POST request workflow..."
+
+          echo "📦 Using REPO URL: https://github.com/Raahim2/File-Manager"
+          echo "🔐 API Key loaded from GitHub secrets."
+
+          echo "📡 Sending POST request to API..."
+          RESPONSE=$(curl -s -X POST "http://projects-api-three.vercel.app/Automation/commit" \
+            -H "Content-Type: application/json" \
+            -d "{\"APIKEY\": \"${API_KEY}\", \"REPOURL\": \"https://github.com/Raahim2/File-Manager\"}")
+
+          echo "📝 Response from API:"
+          echo "$RESPONSE"
+
+          echo "✅ POST request completed successfully."
