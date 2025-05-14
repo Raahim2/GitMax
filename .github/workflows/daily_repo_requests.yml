@@ -1,4 +1,4 @@
-name: Daily Repo Requests
+name: Daily Repo Request
 
 on:
   schedule:
