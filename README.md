@@ -1,2 +1,2 @@
 # GitMax
-## A GitHub automation platform 
+## A GitHub automation/Analytics platform 
